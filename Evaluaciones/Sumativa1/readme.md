@@ -1,4 +1,4 @@
-<div align="center" style="margin:20px;">
+<div align="center">
   PROYECTO DJANGO PRODUCTORASA
 </div>
 
@@ -7,6 +7,7 @@
   <u>PRERREQUISITOS:</u>
 </div>
 
+-----
 
 Antes de comenzar debe instalar python en su computadora, para ello dirijase a la pagina oficial [PYTHON](https://www.python.org/downloads/) luego de haber seguido los pasos de la instalacion para python necesita en su sistema instalar git, hagalo mediante el siguiente enlace [GIT](https://git-scm.com/download/), aqui escoja el sistema operativo correspondiente a su PC.
 
