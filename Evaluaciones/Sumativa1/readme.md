@@ -2,7 +2,8 @@
 
 PRERREQUISITOS:
 
-Antes de comenzar debe instalar python en su computadora, para ello dirijase a la pagina oficial 'https://www.python.org/downloads/' (sin las comillas),
+Antes de comenzar debe instalar python en su computadora, para ello dirijase a la pagina oficial [PYTHON]([https://www.python.org/downloads/])
+ (sin las comillas),
 luego de haber seguido los pasos de la instalacion para python necesita en su sistema instalar git, hagalo mediante el siguiente enlace
 https://git-scm.com/download/ , aqui escoja el sistema operativo correspondiente a su PC.
 
