@@ -1,10 +1,10 @@
 <div align="center">
-  **PROYECTO DJANGO PRODUCTORASA**
+  PROYECTO DJANGO PRODUCTORASA
 </div>
 
 
 <div align="center">
-  **PRERREQUISITOS:**
+  PRERREQUISITOS:
 </div>
 
 
