@@ -1,4 +1,4 @@
-<div align="center" style="margin:'20px';">
+<div align="center" style="margin:20px;">
   PROYECTO DJANGO PRODUCTORASA
 </div>
 
