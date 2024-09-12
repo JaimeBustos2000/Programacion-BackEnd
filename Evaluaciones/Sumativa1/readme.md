@@ -3,9 +3,8 @@
 </div>
 
 
-<div align="center">
-  <u>PRERREQUISITOS:</u>
-</div>
+PRERREQUISITOS:
+
 
 -----
 
