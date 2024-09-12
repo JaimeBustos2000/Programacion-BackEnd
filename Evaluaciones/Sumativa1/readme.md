@@ -1,10 +1,10 @@
-<div align="center">
+<div align="center" style="margin:'20px';">
   PROYECTO DJANGO PRODUCTORASA
 </div>
 
 
 <div align="center">
-  PRERREQUISITOS:
+  <u>PRERREQUISITOS:</u>
 </div>
 
 
