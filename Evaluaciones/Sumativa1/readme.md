@@ -17,5 +17,9 @@ ella '**pip install django**' y presione Enter. Si no puede realizar el comando 
 
 Ahora copie el siguiente link '**https://github.com/JaimeBustos2000/Programacion-BackEnd.git**', abra denuevo la terminal y escriba **'git clone'** y copie el link con CTRL+V, luego dele a Enter. Ahora vaya a 'Archivo', 'Abrir carpeta' y seleccione sumativa1. Si observa en la carpeta actual vera un archivo que se llama manage.py, este archivo maneja el control de la aplicacion principal y permite su ejecucion.
 
-La aplicacion se subdivide en carpetas en formato de modulos que representaran cada uno de las paginas visibles, el inicio(carpeta raiz), el registro de productos y la lista de productos. Si desea iniciar la aplicacion web basta con escribir el siguiente comando en la terminal '**python manage.py runserver**' y presionar Enter, esto iniciara el proceso el cual le enviara un mensaje con un link del siguiente estilo '**http://127.0.0.1:8000/**', presione ctrl y de click dentro del enlace, esto abrira una ventana en su navegador y la aplicacion estara en ejecucion.
+APLICACION WEB:
+-----
+Esta aplicacion se genera por medio del framework de backend DJANGO de python esta se subdivide en carpetas en formato de modulos que representaran cada uno de las paginas visibles, el inicio(carpeta raiz), el registro de productos y la lista de productos, ademas constara con modulos reutilizables mediante los templates de django sumando tambien los elementos esteticos por medio de CSS.
+
+Si desea iniciar la aplicacion web basta con escribir el siguiente comando en la terminal '**python manage.py runserver**' y presionar Enter, esto iniciara el proceso de la app web, el cual le enviara un mensaje en la terminal con un link del siguiente estilo '**http://127.0.0.1:8000/**', copie este enlace en su navegador y vera que la aplicacion estara operativa.
 
