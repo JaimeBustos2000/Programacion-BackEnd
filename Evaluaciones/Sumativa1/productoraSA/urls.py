@@ -18,9 +18,8 @@ from django.contrib import admin
 from django.urls import path,include
 from . import views
 
-
-
 urlpatterns = [
     path('', views.main, name="main"),
-    path("registro/",include("registro.urls"))
+    path("registro/",include("registro.urls")),
+    path("listadeproductos/",include("productos.urls"))
 ]

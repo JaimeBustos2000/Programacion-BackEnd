@@ -1,11 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro</title>
-</head>
-<body>
-    Registro de productos
-</body>
-</html>
+{% extends 'index.html' %}
+
+{% block style %}
+<link rel="stylesheet" href="/registro/static/css/static.css">
+{% endblock %}
+
+{% block title %} Productos {% endblock %}
+
+{% block content %}
+<table>
+    <thead>
+        <th></th>
+        <th></th>
+        <th></th>
+    </thead>
+</table>
+{% endblock %}

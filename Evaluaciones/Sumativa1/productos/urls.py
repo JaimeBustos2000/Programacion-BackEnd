@@ -1,4 +1,6 @@
-from django.shortcuts import render, HttpResponse, redirect
+from django.urls import path,include
+from . import views
 
-def main(request):
-    render(request,"productos.html")
+urlpatterns = [
+    path("",views.main,name="register")
+]
