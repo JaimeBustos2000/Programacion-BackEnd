@@ -7,8 +7,10 @@
 {% block title %} Productos {% endblock %}
 
 {% block content %}
+    {% if error_message %}
+        <p style="color: red; text-align:center">{{ error_message }}</p>
+    {% endif %}
 <h2>Registrar Producto</h2>
-
 <h3>Ingrese los campos para el producto a añadir y presione registrar para finalizar</h3>
 
 <form method="POST" action="{% url 'registrado' %}" class="formulario">
