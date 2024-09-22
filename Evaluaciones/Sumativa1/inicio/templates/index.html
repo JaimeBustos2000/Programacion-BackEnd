@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oswald:wght@200..700&family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'inicio/css/inicio.css' %}">
+    {% block css %}
+    {% endblock %}
+    <title>{% block title %}Inicio{% endblock %}</title>
+</head>
+    
+<body>
+    <nav class="nav">
+        <span>Productora S.A.</span>
+        <div class="btns">
+            <button type="button" onclick="window.location.href='/'" >Inicio</button>
+            <button type="button" onclick="window.location.href='/registro'" >Registrar producto</button>
+            <button type="button" onclick="window.location.href='/listadeproductos'" >Lista de Productos</button>
+        </div>
+    </nav>
+
+    <main>
+        {% block content %}
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'inicio/css/inicio.css' %}">
+        <div style='background-color: #f0f0f0;padding: 20px;border-radius: 10px;'>
+            <h1 style='color: #333;font-size: 54px; font-weight: bold; font-family: Oswald; text-align:center'>¡Bienvenido a Productora S.A.!</h1>
+            <p style='font-size:24px; font-family:"Prompt", sans-serif'>En esta página podrás revisar los productos existentes en el sistema, añadir nuevos productos
+                y modificar los productos existentes. Para comenzar, selecciona una de las opciones del menú superior.
+            </p>
+        </div>
+        {% endblock %}
+    </main>
+    <footer class="footertext">
+        <p>Productora S.A. &copy; 2024. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
