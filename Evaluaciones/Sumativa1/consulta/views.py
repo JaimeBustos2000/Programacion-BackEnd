@@ -22,7 +22,7 @@ productos=[
     },
     {
         "codigo": "#12354",
-        "nombre": "Pack de huevos",
+        "nombre": "Pack de 6 huevos",
         "marca": "Dicorne",
         "fechaven": "12/12/25"
     },
@@ -52,7 +52,7 @@ productos=[
     },
     {
         "codigo": "#12341",
-        "nombre": "Manzanas",
+        "nombre": "Paquete de 3 Manzanas",
         "marca": "Envy",
         "fechaven": "01/04/25"
     },
@@ -77,13 +77,13 @@ productos=[
     {
         "codigo": "#2232",
         "nombre": "pulpa de cerdo",
-        "marca": "super cerdo",
+        "marca": "SuperCerdo",
         "fechaven": "27/09/25"
     },
     {
         "codigo": "#11111",
         "nombre": "vianesas de pavo",
-        "marca": "super cerdo",
+        "marca": "La preferida",
         "fechaven": "22/12/25"
     }
 ]

@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.http import HttpResponse
 
 def espacios_vacios(value):
-    return bool(value.strip())  # Devuelve True si hay contenido no vacío
+    return bool(value.strip()) 
 
 def register(request):
     return render(request, 'registro.html')
@@ -21,8 +21,8 @@ def registrado(request):
         mark = espacios_vacios(marca)
         venc = espacios_vacios(fechaven)
 
-        # Cambiar la lógica de la condición
-        if not (code and name and mark and venc) or not codigo.startswith("#"):  # Si algún campo está vacío
+
+        if not (code and name and mark and venc) or not codigo.startswith("#"):
             error_message = "Todos los campos son obligatorios y no pueden estar vacíos o solo contener espacios, ademas el codigo empiece con #."
             return render(request, 'registro.html', context={'error_message': error_message})
         else:
