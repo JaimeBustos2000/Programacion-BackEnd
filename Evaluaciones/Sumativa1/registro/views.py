@@ -22,8 +22,8 @@ def registrado(request):
         venc = espacios_vacios(fechaven)
 
 
-        if not (code and name and mark and venc) or not codigo.startswith("#"):
-            error_message = "Todos los campos son obligatorios y no pueden estar vacíos o solo contener espacios, ademas el codigo empiece con #."
+        if not (code and name and mark and venc) or not codigo.startswith("#") or fechaven == None:
+            error_message = "Todos los campos son obligatorios y no pueden estar vacíos o solo contener espacios, ademas el codigo empiece con # y la fecha un formato valido"
             return render(request, 'registro.html', context={'error_message': error_message})
         else:
             return redirect(reverse('validacion', kwargs={

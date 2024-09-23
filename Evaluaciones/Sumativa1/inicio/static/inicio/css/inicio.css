@@ -23,12 +23,17 @@ body {
 
 .btns button {
     font-size: 20px;
+    font-family: 'Monserrat';
     background-color: rgb(97, 97, 97);
     color: white;
 }
 
-.footertext p {
+.footertext {
     background-color: black;
+    padding: 20px 0;
+}
+
+.footertext p {
     text-align: center;
     font-size: 20px;
     color: white;

@@ -9,10 +9,13 @@ table th{
     border: 1px solid #000000;
     padding: 8px;
     text-align: left;
+    font-family: 'Prompt';
 }
 table td{
     border: 1px solid #b9b9b9;
     padding: 8px;
+    font-family: 'Oswald';
+    font-weight: bold;
 }
 
 table tr{
