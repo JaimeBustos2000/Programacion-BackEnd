@@ -1,0 +1,45 @@
+h2 {
+    margin: 0;
+    text-align: center;
+    color: #000;
+}
+
+h3 {
+    margin: 0;
+    text-align: center;
+    color: #000;
+}
+
+.formulario {
+    margin-top: 20px;
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-bottom: 50px;
+    padding: 20px;
+    border: 1px solid #000000;
+    border-radius: 10px;
+    background-color: #f0f0f0;
+}
+
+.labels {
+    font-size: 40px;
+}
+
+.inputs {
+    width: 100%;
+    padding: 10px;
+    margin: 0;
+    border: 1px solid #000;
+    border-radius: 5px;
+}
+
+.btn-form {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #000;
+    border-radius: 5px;
+    background-color: #000;
+    color: #ffffff;
+    font-size: 20px;
+}

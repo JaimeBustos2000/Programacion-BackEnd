@@ -1,0 +1,17 @@
+{% extends 'index.html' %}
+
+{% block title %} Validación de Producto {% endblock %}
+{% load static %}
+
+{% block css %} <link rel="stylesheet" href="{% static 'resultado/css/resultado.css' %}"> {% endblock %}
+{% block content %}
+
+
+<div class="container">
+    <h2>Caracteristicas del producto añadido</h2>
+    <span>Código:</span><p> {{ codigo }}</p>
+    <span>Nombre:</span><p>{{ nombre }}</p>
+    <span>Marca:</span><p>{{ marca }}</p>
+    <span>Fecha de vencimiento</span><p> {{ fechaven }}</p>
+</div>
+{% endblock %}

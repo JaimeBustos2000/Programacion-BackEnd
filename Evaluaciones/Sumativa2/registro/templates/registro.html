@@ -1,0 +1,38 @@
+{% extends 'index.html' %}
+
+{% load static %}
+
+{% block css %} <link rel="stylesheet" href="{% static 'registro/css/registro.css' %}"> {% endblock %}
+
+{% block title %} Productos {% endblock %}
+
+{% block content %}
+    {% if error_message %}
+        <p style="color: red; text-align:center">{{ error_message }}</p>
+    {% endif %}
+<h2>Registrar Producto</h2>
+<h3>Ingrese los campos para el producto a añadir y presione registrar para finalizar</h3>
+
+<form method="POST" action="{% url 'registrado' %}" class="formulario">
+    {% csrf_token %}
+    <div>
+        <label for="codigo" class="labels">Código:</label>
+        <input type="text" id="codigo" name="codigo" class="inputs" value="#" maxlength="6" minlength="6" required>
+    </div>
+    <div>
+        <label for="nombre" class="labels">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" class="inputs" minlength="3" required>
+    </div>
+    <div>
+        <label for="marca" class="labels">Marca:</label>
+        <input type="text" id="marca" name="marca" class="inputs" minlength="3" required>
+    </div>
+    <div>
+        <label for="fechaven" class="labels">Fecha de Vencimiento:</label>
+        <input type="date" id="fechaven" name="fechaven" class="inputs" required>
+    </div>
+    <div>
+        <button type="submit" class="btn-form">Registrar</button>
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,30 @@
+h2 {
+    color: #333;
+    text-align: center;
+    margin-top: 20px;
+}
+
+span{
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+p {
+    background-color: #bde2fa;
+    color: #666;
+    font-size: 25px;
+    margin: 10px 0;
+    text-align: center;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    margin-top: 30px;
+}
