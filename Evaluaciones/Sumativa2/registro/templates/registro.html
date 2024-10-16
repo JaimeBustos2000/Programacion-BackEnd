@@ -4,6 +4,7 @@
 
 {% block css %} <link rel="stylesheet" href="{% static 'registro/css/registro.css' %}"> {% endblock %}
 
+
 {% block title %} Productos {% endblock %}
 
 {% block content %}
@@ -11,7 +12,7 @@
         <p style="color: red; text-align:center">{{ error_message }}</p>
     {% endif %}
 <h2>Registrar Producto</h2>
-<h3>Ingrese los campos para el producto a añadir y presione registrar para finalizar</h3>
+<h3>Ingrese los campos para el producto a añadir, puede ingresar mas de una caracteristica pero solo una categoria</h3>
 
 <form method="POST" action="{% url 'registrado' %}" class="formulario">
     {% csrf_token %}
@@ -19,20 +20,55 @@
         <label for="codigo" class="labels">Código:</label>
         <input type="text" id="codigo" name="codigo" class="inputs" value="#" maxlength="6" minlength="6" required>
     </div>
-    <div>
-        <label for="nombre" class="labels">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" class="inputs" minlength="3" required>
-    </div>
+
     <div>
         <label for="marca" class="labels">Marca:</label>
         <input type="text" id="marca" name="marca" class="inputs" minlength="3" required>
     </div>
+
     <div>
-        <label for="fechaven" class="labels">Fecha de Vencimiento:</label>
-        <input type="date" id="fechaven" name="fechaven" class="inputs" required>
+        <label for="nombre" class="labels">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" class="inputs" minlength="3" required>
     </div>
+
+    <div>
+        <label for="categoria" class="labels">Categoría:</label>
+        <select id="categoria" name="categoria" class="inputs" required>
+            {% for categoria in categorias %}
+                <option>{{ categoria.nombre }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div id="caracteristicas-container">
+        <label class="labels">Características:</label>
+        <div class="caracteristica">
+            <label class="labels">Nombre:</label>
+            <select name="caracteristicas_nombre[]" class="inputs" required>
+                {% for value,display in listaCaracteristicas %}
+                    <option value="{{ value }}">{{ display }}</option>
+                {% endfor %}
+            </select>
+
+            <label class="labels">Detalle:</label>
+            <input type="text" name="caracteristicas_detalle[]" class="inputs" minlength="3" required>
+            <button type="button" class="btn-remove" onclick="removeCaracteristica(this)">Eliminar</button>
+        </div>
+    </div>
+    <button type="button" class="btn-add" onclick="addCaracteristica()">Añadir Característica</button>
+
+
     <div>
         <button type="submit" class="btn-form">Registrar</button>
     </div>
 </form>
+
+<script src="{% static 'registro/js/caracteristicas.js' %}"></script>
+
+<script>
+    // Pasamos la lista de características desde Django a una variable de JavaScript.
+    const listaCaracteristicas = JSON.parse('{{ listaCaracteristicas_json|safe }}');
+    console.log(listaCaracteristicas);
+</script>
+
 {% endblock %}

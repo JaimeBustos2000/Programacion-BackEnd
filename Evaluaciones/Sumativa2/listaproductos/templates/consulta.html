@@ -1,0 +1,41 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block css %} <link rel="stylesheet" href="{% static 'consulta/css/consulta.css' %}"> {% endblock %}
+
+{% block title %} Productos {% endblock %}
+{% block content %}
+
+<table class="tabla">
+    <thead>
+        <tr>
+            <th>Codigo</th>
+            <th>Marca</th>
+            <th>Nombre</th>
+            <th>Categoria</th>
+            <th>Caracteristicas</th>
+            <th>Precio</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% if productos %}
+        {% for producto in productos %}
+        <tr>
+            <td>{{ producto.codigo }}</td>
+            <td>{{ producto.marca }}</td>
+            <td>{{ producto.nombre }}</td>
+            <td>{{ producto.categoria.nombre }}</td>
+            <td>
+                <ul>
+                    {% for caracteristica in producto.caracteristicas.all %}
+                        <li>{{ caracteristica.nombre }}: {{ caracteristica.descripcion }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td>{{ producto.precio }}</td>
+        </tr>
+        {% endfor %}
+    {% endif %}
+    </tbody>
+</table>
+{% endblock %}

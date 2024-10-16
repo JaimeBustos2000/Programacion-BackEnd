@@ -1,6 +1,5 @@
 from django.shortcuts import render
 import datetime
-from consulta.views import productos
 
 def convertir_fecha(date_str):
     try:
@@ -9,20 +8,8 @@ def convertir_fecha(date_str):
     except ValueError:
         return None 
 
-def validacion(request, codigo, nombre, marca, fechaven):
-
-    nuevafecha=str(convertir_fecha(fechaven))
-    productos.append({
-            'codigo': codigo,
-            'nombre': nombre,
-            'marca': marca,
-            'fechaven': nuevafecha
-        })
-
-    
-    return render(request, 'resultado.html', {
+def validacion(request,codigo):
+    context = {
         'codigo': codigo,
-        'nombre': nombre,
-        'marca': marca,
-        'fechaven': nuevafecha
-    })
+    }
+    return render(request, 'resultado.html', context=context)
