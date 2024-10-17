@@ -8,7 +8,22 @@
 
 
 <div class="container">
-    <h2>Caracteristicas del producto añadido</h2>
-    <span>Código:</span><p class="p-characteristics"> {{ codigo }}</p>
+    {% if producto %}
+        <h1>Detalle del Producto</h1>
+        <p><strong>Código:</strong> {{ producto.codigo }}</p>
+        <p><strong>Marca:</strong> {{ producto.marca.nombre }}</p>
+        <p><strong>Nombre:</strong> {{ producto.nombre }}</p>
+        <p><strong>Precio:</strong> {{ producto.precio }}</p>
+        <p><strong>Categoría:</strong> {{ producto.categoria.nombre }}</p>
+        <h2>Características</h2>
+        <ul>
+            {% for caracteristica in producto.caracteristicas.all %}
+                <li>{{ caracteristica.nombre.nombre }}: {{ caracteristica.descripcion }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <h1>Producto no encontrado</h1>
+        <p>El producto con el código proporcionado no existe.</p>
+    {% endif %}
 </div>
 {% endblock %}

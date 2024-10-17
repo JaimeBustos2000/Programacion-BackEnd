@@ -4,24 +4,25 @@ document.addEventListener('DOMContentLoaded', function () {
         const newCaracteristica = document.createElement('div');
         newCaracteristica.classList.add('caracteristica');
 
-        // Generar las opciones del select a partir de la variable 'listaCaracteristicas'
+        // Generar las opciones del select a partir de la lista de características
         let optionsHTML = '';
-        listaCaracteristicas.forEach(caracteristica => {
-            const value = caracteristica[2];  // El primer valor del array
-            const display = caracteristica[1];  // El segundo valor del array
-            optionsHTML += `<option value="${value}">${display}</option>`;
-        });
-
+        if (Array.isArray(listaCaracteristicas_json)) {
+            listaCaracteristicas_json.forEach(caracteristica => {
+                optionsHTML += `<option value="${caracteristica}">${caracteristica}</option>`;
+            });
+        } else {
+            console.error('listaCaracteristicas_json no es un array:', listaCaracteristicas_json);
+        }
 
         newCaracteristica.innerHTML = `
-            <label class="labels">Nombre:</label>
-            <select name="caracteristicas_nombre[]" class="inputs" required>
-                ${optionsHTML}
-            </select>
-            <label class="labels">Detalle:</label>
-            <input type="text" name="caracteristicas_detalle[]" class="inputs" minlength="3" required>
-            <button type="button" class="btn-remove" onclick="removeCaracteristica(this)">Eliminar</button>
-        `;
+        <label class="labels">Nombre:</label>
+        <select name="caracteristicas_nombre[]" class="inputs" required>
+            ${optionsHTML}
+        </select>
+        <label class="labels">Detalle:</label>
+        <input type="text" name="caracteristicas_detalle[]" class="inputs" minlength="3" required>
+        <button type="button" class="btn-remove" onclick="removeCaracteristica(this)">Eliminar</button>
+    `;
         container.appendChild(newCaracteristica);
 
         // Attach event listener to the new remove button

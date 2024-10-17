@@ -1,15 +1,15 @@
 from django.shortcuts import render
-import datetime
+from inicio.models import Producto
 
-def convertir_fecha(date_str):
-    try:
-        date_obj = datetime.datetime.strptime(date_str, '%Y-%m-%d')
-        return date_obj.strftime('%d/%m/%y')
-    except ValueError:
-        return None 
 
 def validacion(request,codigo):
-    context = {
-        'codigo': codigo,
-    }
+    try:
+        producto = Producto.objects.get(codigo=codigo)
+    except Producto.DoesNotExist:
+        producto = None
+    finally:
+        context = {
+            'producto': producto,
+        }
+        
     return render(request, 'resultado.html', context=context)

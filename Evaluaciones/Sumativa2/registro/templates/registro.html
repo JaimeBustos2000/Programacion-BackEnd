@@ -4,71 +4,114 @@
 
 {% block css %} <link rel="stylesheet" href="{% static 'registro/css/registro.css' %}"> {% endblock %}
 
-
 {% block title %} Productos {% endblock %}
 
 {% block content %}
     {% if error_message %}
         <p style="color: red; text-align:center">{{ error_message }}</p>
     {% endif %}
-<h2>Registrar Producto</h2>
+<h2>REGISTRAR PRODUCTO</h2>
 <h3>Ingrese los campos para el producto a añadir, puede ingresar mas de una caracteristica pero solo una categoria</h3>
 
-<form method="POST" action="{% url 'registrado' %}" class="formulario">
-    {% csrf_token %}
-    <div>
-        <label for="codigo" class="labels">Código:</label>
-        <input type="text" id="codigo" name="codigo" class="inputs" value="#" maxlength="6" minlength="6" required>
+
+<div class="principal-cont">
+
+    <div class="add-new">
+        <h2 class="text-add-principal">Añadir nuevos campos</h2>
+        
+        <div class="form-marca">
+            <form method="POST" action="{% url 'nuevaMarca' %}" class="formulario">
+                <h3 class="text-add">Añadir nueva marca</h3>
+                {% csrf_token %}
+                <label for="marca" class="labels" disabled></label>   
+                <input type="text" id="marca" name="marca" class="inputs" minlength="3" required placeholder="Nombre marca">
+                <button type="submit" class="btn-form">Añadir Marca</button>
+            </form>
+        </div>
+
+        <div class="form-categoria">
+            <form method="POST" action="{% url 'nuevaCategoria' %}" class="formulario">
+                <h3 class="text-add">Añadir nueva categoría</h3>
+                {% csrf_token %}
+                <label for="categoria" class="labels" disabled></label>   
+                <input type="text" id="categoria" name="categoria" class="inputs" minlength="3" required placeholder="Nombre categoria">
+                <button type="submit" class="btn-form">Añadir Categoría</button>
+            </form>
+        </div>
+        
+        <div class="form-caracteristica">
+            <form method="POST" action="{% url 'nuevaCaracteristica' %}" class="formulario">
+                <h3 class="text-add">Añadir nueva característica</h3>
+                {% csrf_token %}
+                <label for="caracteristica" class="labels" disabled></label>   
+                <input type="text" id="caracteristica" name="caracteristica" class="inputs" minlength="3" required placeholder="Nombre caracteristica" >
+                <button type="submit" class="btn-form">Añadir Característica</button>
+            </form>
+        </div>
+
     </div>
 
-    <div>
-        <label for="marca" class="labels">Marca:</label>
-        <input type="text" id="marca" name="marca" class="inputs" minlength="3" required>
-    </div>
+    <form method="POST" action="{% url 'registrado' %}" class="formulario form-producto">
+        {% csrf_token %}
+        <div>
+            <label for="codigo" class="labels">Código del producto:</label>
+            <input type="text" id="codigo" name="codigo" class="inputs" value="#" maxlength="6" minlength="6" required>
+        </div>
 
-    <div>
-        <label for="nombre" class="labels">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" class="inputs" minlength="3" required>
-    </div>
-
-    <div>
-        <label for="categoria" class="labels">Categoría:</label>
-        <select id="categoria" name="categoria" class="inputs" required>
-            {% for categoria in categorias %}
-                <option>{{ categoria.nombre }}</option>
-            {% endfor %}
-        </select>
-    </div>
-
-    <div id="caracteristicas-container">
-        <label class="labels">Características:</label>
-        <div class="caracteristica">
-            <label class="labels">Nombre:</label>
-            <select name="caracteristicas_nombre[]" class="inputs" required>
-                {% for value,display in listaCaracteristicas %}
-                    <option value="{{ value }}">{{ display }}</option>
+        <div class="marca-container">
+            <label for="marca" class="labels">Marca producto:</label>
+            <select name="marca" class="inputs" required>
+                <option value="" disabled selected>Seleccione una marca</option>
+                {% for marca in marcas %}
+                    <option value="{{ marca.nombre }}">{{ marca.nombre }}</option>
                 {% endfor %}
             </select>
-
-            <label class="labels">Detalle:</label>
-            <input type="text" name="caracteristicas_detalle[]" class="inputs" minlength="3" required>
-            <button type="button" class="btn-remove" onclick="removeCaracteristica(this)">Eliminar</button>
         </div>
-    </div>
-    <button type="button" class="btn-add" onclick="addCaracteristica()">Añadir Característica</button>
 
+        <div>
+            <label for="nombre" class="labels">Nombre del producto:</label>
+            <input type="text" id="nombre" name="nombre" class="inputs" minlength="3" required>
+        </div>
 
-    <div>
-        <button type="submit" class="btn-form">Registrar</button>
-    </div>
-</form>
+        <div>
+            <label for="categoria" class="labels">Categoría:</label>
+            <select id="categoria" name="categoria" class="inputs" required>
+                {% for categoria in categorias %}
+                    <option>{{ categoria.nombre }}</option>
+                {% endfor %}
+            </select>
+        </div>
 
+        <div id="caracteristicas-container">
+            <label class="labels">Características del producto:</label>
+            <div class="caracteristica">
+                <label class="labels">Nombre:</label>
+                <select name="caracteristicas_nombre[]" class="inputs" required>
+                    {% for value in listaCaracteristicas %}
+                        <option value="{{ value }}">{{ value }}</option>
+                    {% endfor %}
+                </select>
+
+                <label class="labels">Detalle:</label>
+                <input type="text" name="caracteristicas_detalle[]" class="inputs" minlength="3" required>
+                <button type="button" class="btn-remove" onclick="removeCaracteristica(this)">Eliminar</button>
+            </div>
+        </div>
+
+        <button type="button" class="btn-add" onclick="addCaracteristica()">Añadir Característica</button>
+
+        <div>
+            <button type="submit" class="btn-form">Registrar</button>
+        </div>
+    </form>
+
+</div>
 <script src="{% static 'registro/js/caracteristicas.js' %}"></script>
 
 <script>
     // Pasamos la lista de características desde Django a una variable de JavaScript.
-    const listaCaracteristicas = JSON.parse('{{ listaCaracteristicas_json|safe }}');
-    console.log(listaCaracteristicas);
+    const listaCaracteristicas_json = JSON.parse('{{ listaCaracteristicas_json |safe }}');
+    console.log(listaCaracteristicas_json);
 </script>
 
 {% endblock %}
