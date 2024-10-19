@@ -5,15 +5,18 @@ import json
 import time
 from django.db import IntegrityError
 
+# Verificar que los campos no tengan solo espacios
 def espacios_vacios(value):
-    return bool(value.strip()) 
+    return bool(value.strip())
 
+# Metodo para iterar sobre una lista de campos y verificar si todos son True(No vacios)
 def validacion(*args):
     for elem in args:
         if elem == False:
             return False
     return True
 
+# Vista de inicio del formulario
 def register(request):
     categorias = Categoria.objects.all()
     listaCaracteristicas = OpcionCaracterisca.objects.all().order_by('nombre')
@@ -28,38 +31,96 @@ def register(request):
         'marcas': marcas
     })
 
+# Vista para validar el registro de un producto
 def registrado(request):
     if request.method == "POST":
-        codigo = request.POST.get('codigo')
-        marca = request.POST.get('marca')
-        nombre = request.POST.get('nombre')
-        categoria = request.POST.get('categoria')
+        # Cargar datos de la base de datos
+        categorias = Categoria.objects.all()
+        listaCaracteristicas = OpcionCaracterisca.objects.all().order_by('nombre')
+        lista_caracteristicas_json = json.dumps([str(caracteristica) for caracteristica in listaCaracteristicas])
+        marcas = Marca.objects.all()
         
-        objeto_marca = NombreMarca.objects.filter(nombre=marca).first().id
-        marca_producto = Marca.objects.filter(nombre=objeto_marca)
-
-        print("codigo: ", codigo)
-        print("Marca: ", objeto_marca)
+        # Datos unicos
+        codigo = request.POST.get('codigo')
+        id_marca = int(request.POST.get('marca'))
+        nombre = request.POST.get('nombre')
+        precio = request.POST.get('precio')
+        id_categoria = int(request.POST.get('categoria'))
+        
+        code = espacios_vacios(codigo)
+        print(code)
+        name = espacios_vacios(nombre)
+        
+        for letra in codigo:
+            valid_entry = espacios_vacios(letra)
+            if valid_entry == False:
+                code = False
+                break
+        else:
+            code = True
+        
+        if len(codigo) < 6 and code == False:
+            return render(request, 'registro.html', 
+                          context={'error_message': "El código debe tener al menos 6 caracteres", 
+                                    'categorias': categorias, 
+                                    'marcas': marcas, 
+                                    'listaCaracteristicas': listaCaracteristicas, 
+                                    'listaCaracteristicas_json': lista_caracteristicas_json})
+        
+        # Transformar precio a entero
+        try:
+            precio = int(precio)
+        except ValueError as e:
+            error_message = "El precio debe ser un número entero"
             
-        """objeto_categoria = Categoria.objects.get(nombre=categoria)
+            return render(request, 'registro.html', context={
+                'error_message': error_message, 
+                'categorias': categorias, 
+                'marcas': marcas, 
+                'listaCaracteristicas': listaCaracteristicas, 
+                'listaCaracteristicas_json': lista_caracteristicas_json})
+        
+        # Comprobar si el código ya existe
+        if Producto.objects.filter(codigo=codigo).exists():
+            error_message = "El código ya existe"
+            return render(request, 'registro.html', context={'error_message': error_message, 
+                                                             'categorias': categorias, 
+                                                             'marcas': marcas, 
+                                                             'listaCaracteristicas': listaCaracteristicas, 
+                                                             'listaCaracteristicas_json': lista_caracteristicas_json})
+        
+        # Comprobar si el nombre ya existe
+        if Producto.objects.filter(nombre=nombre).exists():
+            error_message = "El nombre ya existe"
+            return render(request, 'registro.html', context={'error_message': error_message, 
+                                                             'categorias': categorias, 
+                                                             'marcas': marcas, 
+                                                             'listaCaracteristicas': listaCaracteristicas, 
+                                                             'listaCaracteristicas_json': lista_caracteristicas_json})
+        
+        # Obtener la marca y la categoria
+        opcion_marca = NombreMarca.objects.get(id=id_marca)
+        marca = Marca.objects.get(nombre=opcion_marca)
+        
+        opcion_categoria = OpcionCategoria.objects.get(id=id_categoria)
+        categoria = Categoria.objects.get(nombre=opcion_categoria)
+        
+        # Obtener la lista de caracteristicas con detalles
         caracteristicas_nombre = request.POST.getlist('caracteristicas_nombre[]')
         caracteristicas_detalle = request.POST.getlist('caracteristicas_detalle[]')
 
         # Comprobar si los campos están vacíos o solo contienen espacios
-        code = espacios_vacios(codigo)
-        name = espacios_vacios(nombre)
-        mark = espacios_vacios(marca)
-        category = espacios_vacios(categoria)
+
         
-        campos_validos = validacion(code, name, mark, category)
+        # Comprobar si las listas de caracteristicas y detalles no están vacías
+        campos_validos = validacion(code, name)
         listas_validas = bool(caracteristicas_detalle) and bool(caracteristicas_nombre)
         
-        print("Listas validas: ", listas_validas)
-        print("Campos validos: ", campos_validos)
-        
+        # Crear el producto con las caracteristicas
         if campos_validos and listas_validas:
-            producto = Producto.objects.create(codigo=codigo, marca=objeto_marca, nombre=nombre, categoria=objeto_categoria)
+            producto = Producto.objects.create(codigo=codigo, marca=marca, nombre=nombre, categoria=categoria,precio=precio)
             
+            # Desempaquetar las listas de caracteristicas y detalles
             for nombre, detalle in zip(caracteristicas_nombre, caracteristicas_detalle):
                 print(f'Nombre: {nombre}, Detalle: {detalle}')
                 
@@ -69,31 +130,35 @@ def registrado(request):
                 
                 # Asociar la característica con el producto
                 producto.caracteristicas.add(caracteristica)
-                
+            
+            # Vericar que los campos del producto sean validos y guardarlo    
+            producto.full_clean()    
             producto.save()
             return redirect(reverse('validacion', kwargs={
                 'codigo': codigo
             }))
+            
         elif campos_validos and listas_validas==False:
-            producto = Producto.objects.create(codigo=codigo, marca=objeto_marca, nombre=nombre, categoria=objeto_categoria)
+            # Crear el producto si no hay caracteristicas
+            producto = Producto.objects.create(codigo=codigo, marca=id_marca,precio=precio, nombre=nombre, categoria=id_categoria)
+            producto.full_clean() 
             producto.save()
             return redirect(reverse('validacion', kwargs={
                 'codigo': codigo
             }))
+        
         else:
             error_message = "Hay errores en los campos, verifique los datos ingresados"
-            return render(request, 'registro.html', context={'error_message': error_message})"""
+            return render(request, 'registro.html', context={'error_message': error_message})
         
-        return redirect(reverse('validacion', kwargs={
+    return redirect(reverse('validacion', kwargs={
                     'codigo': codigo
                 }))
 
 def nuevaMarca(request):
-    
     categorias = Categoria.objects.all()
     listaCaracteristicas = OpcionCaracterisca.objects.all().order_by('nombre')
     lista_caracteristicas_json = json.dumps([str(caracteristica) for caracteristica in listaCaracteristicas])
-    
     marcas = Marca.objects.all()
     
     if request.method == "POST":
@@ -104,6 +169,7 @@ def nuevaMarca(request):
             try:
                 nombre_marca=NombreMarca.objects.create(nombre=marca)
                 Marca.objects.create(nombre=nombre_marca)
+                marcas = Marca.objects.all()
             except IntegrityError as e:
                 error_message = "La marca ya existe"
                 return render(request, 'registro.html', 
@@ -129,20 +195,31 @@ def nuevaMarca(request):
                 'categorias': categorias,
                 'marcas': marcas})
 
-def nuevaCategoria(request):
-    categorias = Categoria.objects.all()
+def nuevaCategoria(request):    
+    marcas = Marca.objects.all()
     listaCaracteristicas = OpcionCaracterisca.objects.all().order_by('nombre')
     lista_caracteristicas_json = json.dumps([str(caracteristica) for caracteristica in listaCaracteristicas])
-    
-    marcas = Marca.objects.all()
+    categorias = Categoria.objects.all()
     
     if request.method == "POST":
         categoria = request.POST.get('categoria')
         
         if espacios_vacios(categoria):
-            nombre_categoria = OpcionCategoria.objects.create(nombre=categoria)
-            Categoria.objects.create(nombre=nombre_categoria)
-            
+            try:
+                nombre_categoria = OpcionCategoria.objects.create(nombre=categoria)
+                Categoria.objects.create(nombre=nombre_categoria)
+                categorias = Categoria.objects.all()
+
+            except IntegrityError as e:
+                error_message = "La categoria ya existe"
+                return render(request, 'registro.html', 
+                              context={
+                                  'error_message': error_message, 
+                                  'categorias': categorias, 
+                                  'marcas': marcas, 
+                                  'listaCaracteristicas': listaCaracteristicas, 
+                                  'listaCaracteristicas_json': lista_caracteristicas_json})
+
             return render(request, 'registro.html',{
                 'listaCaracteristicas': listaCaracteristicas,
                 'listaCaracteristicas_json': lista_caracteristicas_json,
@@ -151,6 +228,7 @@ def nuevaCategoria(request):
         else:
             error_message = "El campo no puede estar vacío o solo contener espacios"
             return render(request, 'registro.html', context={'error_message': error_message})
+        
     return render(request, 'registro.html',{
                 'listaCaracteristicas': listaCaracteristicas,
                 'listaCaracteristicas_json': lista_caracteristicas_json,
@@ -158,16 +236,28 @@ def nuevaCategoria(request):
                 'marcas': marcas})
 
 def nuevaCaracteristica(request):
+    marcas = Marca.objects.all()
     categorias = Categoria.objects.all()
     listaCaracteristicas = OpcionCaracterisca.objects.all().order_by('nombre')
     lista_caracteristicas_json = json.dumps([str(caracteristica) for caracteristica in listaCaracteristicas])
     
-    marcas = Marca.objects.all()
     if request.method == "POST":
         caracteristica = request.POST.get('caracteristica')
         
         if espacios_vacios(caracteristica):
-            OpcionCaracterisca.objects.create(nombre=caracteristica)
+            try:
+                OpcionCaracterisca.objects.create(nombre=caracteristica)
+                listaCaracteristicas = OpcionCaracterisca.objects.all().order_by('nombre')
+                lista_caracteristicas_json = json.dumps([str(caracteristica) for caracteristica in listaCaracteristicas])
+            except IntegrityError as e:
+                error_message = "La caracteristica ya existe"
+                return render(request, 'registro.html', 
+                              context={
+                                  'error_message': error_message, 
+                                  'categorias': categorias, 
+                                  'marcas': marcas, 
+                                  'listaCaracteristicas': listaCaracteristicas, 
+                                  'listaCaracteristicas_json': lista_caracteristicas_json})
             
             return render(request,'registro.html',{
                 'listaCaracteristicas': listaCaracteristicas,
