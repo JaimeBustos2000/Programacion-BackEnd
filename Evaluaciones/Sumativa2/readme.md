@@ -41,9 +41,10 @@ Para utilizar la aplicacion correctamente tenga en cuenta lo siguiente:
 
      6) Para ingresar debe utilizar el usuario: admin  y la contraseña: inacap2024
 
-     7) Hay una tabla intermedia para añadir el texto en cada caso es: opcioncaracteristica, opcioncategoria y nombremarca, aqui
-     solo se asocian los nombres el cual puede ser cualquiera que se desee, para añadir correctamente cada uno de los campos debe 
-     luego agregarlo en las tablas caracteristica, categoria o marca respectivamente.
+     7) Hay una tabla intermedia para añadir el texto en cada caso es: opcioncaracteristica, opcioncategoria y 
+     nombremarca, aqui solo se asocian los nombres el cual puede ser cualquiera que se desee, para añadir 
+     correctamente cada uno de los campos debe luego agregarlo en las tablas caracteristica, categoria o marca 
+     respectivamente.
 
     REGISTROS:
     
