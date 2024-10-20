@@ -1,30 +1,43 @@
+/* Estilo para el contenedor principal */
+.container {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 800px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilo para los títulos */
+h1,
 h2 {
     color: #333;
-    text-align: center;
-    margin-top: 20px;
+    margin-bottom: 20px;
+    font-family: 'Arial', sans-serif;
 }
 
-span{
-    font-size: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.p-characteristics {
-    background-color: #bde2fa;
-    color: #666;
-    font-size: 25px;
+/* Estilo para los párrafos */
+p {
     margin: 10px 0;
-    text-align: center;
+    font-size: 16px;
+    color: #555;
+    font-family: 'Arial', sans-serif;
 }
 
-.container {
-    width: 80%;
-    margin: 0 auto;
-    background-color: #fff;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    margin-top: 30px;
+/* Estilo para las listas de características */
+.lista-caracteristicas {
+    list-style-type: none;
+}
+
+.lista-caracteristicas li {
+    background-color: #e9e9e9;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 4px;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Estilo para los textos en negrita */
+strong {
+    color: #000;
 }

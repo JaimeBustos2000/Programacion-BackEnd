@@ -43,12 +43,14 @@
 
             <div class="form-group add-caracteristics">
                 <label class="lbl-caracteristica">Características:</label>
-                <select name="caracteristicas[]" id="caracteristica" multiple>
+                <select name="caracteristicas" id="caracteristica">
                     <option value="" disabled selected>Seleccione una o mas característica</option>
                     {% for caracteristica in caracteristicas %}
                         <option value="{{ caracteristica.id }}" id="caracteristica-value">{{ caracteristica.nombre }}</option>
                     {% endfor %}
                 </select>
+                <input type="hidden" name="caracteristicas_ids" id="caracteristicas_ids" value="">
+                <button type="button" class="btn-form" id="caracteristicas-filter">+</button>
             </div>
             <button type="submit" class="btn-form">Consultar</button>
         </form>
@@ -60,44 +62,45 @@
     <div class="row" id="tags-container">
     </div>
 
-    <table class="tabla">
-        <thead>
-            <tr>
-                <th>Código</th>
-                <th>Marca</th>
-                <th>Nombre</th>
-                <th>Categoría</th>
-                <th>Características</th>
-                <th>Precio</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% if productos %}
-            {% for producto in productos %}
-            <tr>
-                <td>{{ producto.codigo }}</td>
-                <td>{{ producto.marca.nombre }}</td>
-                <td>{{ producto.nombre }}</td>
-                <td>{{ producto.categoria.nombre }}</td>
-                <td>
-                    <ul class="lista-cts">
-                        {% for caracteristica in producto.caracteristicas.all %}
-                            <li>{{ caracteristica.nombre }}: {{ caracteristica.descripcion }}</li>
-                        {% endfor %}
-                    </ul>
-                </td>
-                <td>$ {{ producto.precio }}</td>
-            </tr>
-            {% endfor %}
-        {% else %}
-            <tr class="txt-nproducts">
-                <td colspan="6">No se encontraron productos.</td>
-            </tr>
-        {% endif %}
-        </tbody>
-    </table>
+    <div class="table-products">
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Marca</th>
+                    <th>Nombre</th>
+                    <th>Categoría</th>
+                    <th>Características</th>
+                    <th>Precio</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% if productos %}
+                {% for producto in productos %}
+                <tr class="tupla-producto">
+                    <td>{{ producto.codigo }}</td>
+                    <td>{{ producto.marca.nombre }}</td>
+                    <td>{{ producto.nombre }}</td>
+                    <td>{{ producto.categoria.nombre }}</td>
+                    <td>
+                        <ul class="lista-cts">
+                            {% for caracteristica in producto.caracteristicas.all %}
+                                <li>{{ caracteristica.nombre }}: {{ caracteristica.descripcion }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td>$ {{ producto.precio }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr class="txt-nproducts">
+                    <td colspan="6">No se encontraron productos.</td>
+                </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
 </div>
-
 <script src="{% static 'productos/js/consulta.js' %}"></script>
 
 {% endblock %}

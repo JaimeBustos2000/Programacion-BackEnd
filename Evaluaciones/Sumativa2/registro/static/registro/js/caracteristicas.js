@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
             ${opciones}
         </select>
         <label class="labels">Detalle:</label>
-        <input type="text" name="caracteristicas_detalle[]" class="inputs" minlength="3" required>
+        <input type="text" name="caracteristicas_detalle[]" class="inputs" minlength="1" required>
         <button type="button" class="btn-remove" onclick="removeCaracteristica(this)">Eliminar</button>
     `;
         container.appendChild(nuevaCaracteristica);

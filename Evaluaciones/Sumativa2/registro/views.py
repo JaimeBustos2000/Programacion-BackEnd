@@ -51,17 +51,9 @@ def registrado(request):
         print(code)
         name = espacios_vacios(nombre)
         
-        for letra in codigo:
-            valid_entry = espacios_vacios(letra)
-            if valid_entry == False:
-                code = False
-                break
-        else:
-            code = True
-        
-        if len(codigo) < 6 and code == False:
+        if len(codigo) < 6 or ' ' in codigo:
             return render(request, 'registro.html', 
-                          context={'error_message': "El código debe tener al menos 6 caracteres", 
+                          context={'error_message': "El código debe tener al menos 6 caracteres sin espacios", 
                                     'categorias': categorias, 
                                     'marcas': marcas, 
                                     'listaCaracteristicas': listaCaracteristicas, 

@@ -28,15 +28,19 @@ def consulta(request):
         categoria = request.POST.get('categoria')
         marca = request.POST.get('marca')
         orden_precio = request.POST.get('precio')
-        caracteristicas_ids = request.POST.getlist('caracteristicas[]')
+        caracteristicas_ids = list(request.POST.get('caracteristicas_ids').strip().split(','))
         
-        caracteristicas_ids = [int(caracteristica) for caracteristica in caracteristicas_ids]
+        # print("caracteristicas_ids: ", caracteristicas_ids)
+        try:
+            caracteristicas_ids = [int(caracteristica) for caracteristica in caracteristicas_ids]
+        except ValueError:
+            caracteristicas_ids = []
         
         if categoria:
-            print("Hay filtro de categoria")
+            # print("Hay filtro de categoria")
             productos = productos.filter(categoria__nombre=categoria)
         if marca:
-            print("Hay filtro de marca")
+            # print("Hay filtro de marca")
             productos = productos.filter(marca__nombre=marca)
             
         if orden_precio:
@@ -47,41 +51,27 @@ def consulta(request):
         else:
             productos = productos.order_by('id')
     
-    
         if caracteristicas_ids:
-            print("Hay filtro de características")
-            print("caracteristicas: ", caracteristicas_ids)
-            
             id_productos_filtrados = []
             
             for producto in productos:
-                print("Producto: ", producto)
                 # Obtener las características asociadas del producto
                 caracteristicas_asociadas = producto.caracteristicas.all()
-                print("Características asociadas: ", caracteristicas_asociadas)
                 
-                # Obtener las ids de las caracteristicas con detalles
+                # Obtener las ids de las caracteristicas asociadas y buscar la referencia en las tablas relacionadas
                 caracteristicas_producto = []
                 for caracteristica in caracteristicas_asociadas:
-                    print("--------------------")
+                    # print("--------------------")
                     id_caracteristica = int(Caracteristica.objects.get(id=caracteristica.id).nombre_id)
                     caracteristicas_producto.append(id_caracteristica)
-                    print("Características id referenciada: ", id_caracteristica)
-                    print("nombre de la caracteristica:",OpcionCaracterisca.objects.get(id=id_caracteristica).nombre)
-                    print("--------------------")
-                print("Características producto: ", caracteristicas_producto)
+                    # print("Características id referenciada: ", id_caracteristica)
+                    # print("nombre de la caracteristica:",OpcionCaracterisca.objects.get(id=id_caracteristica).nombre)
                 
-                todas_coinciden = True
+                # Verificar las coincidencias de id en las tablas
                 if all(item in caracteristicas_producto for item in caracteristicas_ids):
-                    print("Características coinciden")
                     id_productos_filtrados.append(producto.id)
-                    todas_coinciden = True
-                else:
-                    todas_coinciden = False
-                    print("Características no coinciden")
                     
-                print("lista de productos filtrados: ", id_productos_filtrados)
-                
+            # Filtrar los productos obtenidos   
             productos = productos.filter(id__in=id_productos_filtrados)
         
             return render(request, 'consulta.html', context={
