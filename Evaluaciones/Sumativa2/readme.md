@@ -19,25 +19,32 @@ APLICACION WEB:
 -----
 Esta aplicacion se genera por medio del framework de backend DJANGO de python esta se subdivide en carpetas en formato de modulos que representaran cada uno de las paginas visibles, el inicio, el registro de productos, la lista de productos, etc, ademas constara con modulos reutilizables mediante los templates de django sumando tambien los elementos esteticos por medio de CSS.
 
-...
+
 Si desea iniciar la aplicacion web basta con escribir el siguiente comando en la terminal de vscode '**python manage.py runserver**' y presionar Enter, esto iniciara el proceso de la app web, el cual le enviara un mensaje en la terminal con un link del siguiente estilo '**http://127.0.0.1:8000/**', copie este enlace en su navegador y vera que la aplicacion estara operativa. Revise que la carpeta donde se encuentra es la que contiene el archivo 'manage.py', si no es el caso abra la carpeta correcta en la parte superior de VsCode.
 
 USO DE APLICACION:
 -----
 Para utilizar la aplicacion correctamente tenga en cuenta lo siguiente:
+
      1) Respetar el tipo de campo. Los campos que requieren un tipo de dato especifico tienen una pista de llenado.
 
-     2) Al añadir nuevas marcas, nombre caracteristicas y categoria, verifique que estas hayan sido añadidas correctamente revisando si en el campo del formulario de registro esta presente el atributo añadido.
+     2) Al añadir nuevas marcas, nombre caracteristicas y categoria, verifique que estas hayan sido añadidas correctamente 
+     revisando si en el campo del formulario de registro esta presente el atributo añadido.
 
-     3) Solo puede añadir productos que tengan un nombre unico, codigo unico y que los campos no contengan solo espacios ya que dara error.
+     3) Solo puede añadir productos que tengan un nombre unico, codigo unico y que los campos no contengan solo espacios ya 
+     que dara error.
 
      4) Todos los errores se mostraran en una alerta emergente.
 
-     5) Puede acceder a la pagina de administracion de django para editar en profundidad las marcas, caracteristicas y categorias tiene el siguiente link '**http://127.0.0.1:8000/admin**'
+     5) Puede acceder a la pagina de administracion de django para editar en profundidad las marcas, caracteristicas y 
+     categorias tiene el siguiente link '**http://127.0.0.1:8000/admin**'
 
      6) Para ingresar debe utilizar el usuario: admin  y la contraseña: inacap2024
 
-     7) Hay una tabla intermedia para añadir el texto en cada caso es: opcioncaracteristica, opcioncategoria y nombremarca, aqui solo se asocian los nombres el cual puede ser cualquiera que se desee, para añadir correctamente cada uno de los campos debe luego agregarlo en las tablas caracteristica, categoria o marca respectivamente.
+     7) Hay una tabla intermedia para añadir el texto en cada caso es: opcioncaracteristica, opcioncategoria y 
+     nombremarca, aqui solo se asocian los nombres el cual puede ser cualquiera que se desee, para añadir 
+     correctamente cada uno de los campos debe luego agregarlo en las tablas caracteristica, categoria o marca 
+     respectivamente.
 
     REGISTROS:
     
