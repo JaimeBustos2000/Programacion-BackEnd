@@ -1,0 +1,34 @@
+{% extends 'index.html' %}
+
+{% block title %} Validación de Producto {% endblock %}
+{% load static %}
+
+{% block css %} <link rel="stylesheet" href="{% static 'resultado/css/resultado.css' %}"> {% endblock %}
+{% block content %}
+
+
+<div class="container">
+    {% if producto %}
+        <h1>Detalle del Producto</h1>
+        <p><strong>Código:</strong> {{ producto.codigo }}</p>
+        <p><strong>Marca:</strong> {{ producto.marca.nombre }}</p>
+        <p><strong>Nombre:</strong> {{ producto.nombre }}</p>
+        <p><strong>Precio: </strong>${{ producto.precio }}</p>
+        <p><strong>Categoría:</strong> {{ producto.categoria.nombre }}</p>
+        
+        {% if producto.caracteristicas.exists %}
+            <h2>Características</h2>
+            <ul class="lista-caracteristicas">
+                {% for caracteristica in producto.caracteristicas.all %}
+                    <li>{{ caracteristica.nombre.nombre }}: {{ caracteristica.descripcion }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <h2>Sin características</h2>
+        {% endif %}
+    {% else %}
+        <h1>Producto no encontrado</h1>
+        <p>El producto con el código proporcionado no existe.</p>
+    {% endif %}
+{% endblock %}
+</div>
