@@ -1,9 +1,24 @@
 # Create your views here.
 from django.shortcuts import render
-from inicio.models import Producto, Categoria,NombreMarca,Marca,Caracteristica,OpcionCategoria,OpcionCaracterisca
-from django.http import JsonResponse
+from inicio.models import Producto, Categoria,Marca,Caracteristica,OpcionCaracterisca
+from django.contrib.auth.decorators import login_required, user_passes_test
 
-def main(request):
+############# Visor de grupo ##################
+def is_in_group(group_name):
+    def check(user):
+        return user.groups.filter(name=group_name).exists()
+    return check
+
+def is_in_group_any(user):
+    # Verifica si el usuario pertenece a uno de los grupos
+    return user.groups.filter(name__in=['admin_products', 'general']).exists()
+############# Visor de grupo ##################
+
+
+# Vista principal de productos donde se muestran la lista de productos
+@user_passes_test(is_in_group_any,login_url='main')
+@login_required
+def productos(request):
     productos = Producto.objects.all().order_by('id')
     marcas = Marca.objects.all()
     categorias = Categoria.objects.all()
@@ -17,6 +32,10 @@ def main(request):
     }
     return render(request, 'consulta.html', context)
 
+
+# Vista de consulta de productos con permisos de consulta
+@user_passes_test(is_in_group_any,login_url='main')
+@login_required
 def consulta(request):
     productos = Producto.objects.all()
     marcas = Marca.objects.all()

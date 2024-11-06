@@ -1,7 +1,12 @@
 body {
     margin: 0;
     background-color: rgb(96, 175, 221);
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    height: 100vh;
+    
 }
+
 
 .nav {
     background-color: rgb(71, 155, 71);
@@ -26,6 +31,26 @@ body {
     font-family: 'Monserrat';
     background-color: rgb(97, 97, 97);
     color: white;
+}
+
+.main-container{
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 10px;
+    height: 100%;
+}
+
+.main-container h1{
+    color: #333;
+    font-size: 54px;
+    font-weight: bold;
+    font-family: 'Oswald';
+    text-align: center
+}
+
+.main-container p{
+    font-size: 24px;
+    font-family: "Prompt", sans-serif
 }
 
 .footertext {

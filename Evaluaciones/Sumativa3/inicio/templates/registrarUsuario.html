@@ -1,0 +1,17 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block css %} <link rel="stylesheet" href="{% static 'inicio/css/registrarusuario.css' %}"> {% endblock %}
+{% block title %}Registro{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <h2>Registro</h2>
+    <form action="{% url 'create_user' %}" method="post">
+        {% csrf_token %}
+        {{ registro.as_p }}
+        <button type="submit" class="btn">Registrar</button>
+        <button type="button" class="btn-create" onclick="window.location.href='/'">Volver</button>
+    </form>
+</div>
+{% endblock %}

@@ -2,8 +2,20 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from inicio.models import Categoria,OpcionCaracterisca,Marca,NombreMarca,Caracteristica,Producto,OpcionCategoria
 import json
-import time
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db import IntegrityError
+
+############# Visor de grupo ##################
+def is_in_group(group_name):
+    def check(user):
+        return user.groups.filter(name=group_name).exists()
+    return check
+
+def is_in_group_any(user):
+    # Verifica si el usuario pertenece a uno de los grupos
+    return user.groups.filter(name__in=['admin_products', 'general']).exists()
+############# Visor de grupo ##################
+
 
 # Verificar que los campos no tengan solo espacios
 def espacios_vacios(value):
@@ -17,6 +29,7 @@ def validacion(*args):
     return True
 
 # Vista de inicio del formulario
+@login_required
 def register(request):
     categorias = Categoria.objects.all()
     listaCaracteristicas = OpcionCaracterisca.objects.all().order_by('nombre')
@@ -32,6 +45,8 @@ def register(request):
     })
 
 # Vista para validar el registro de un producto
+@user_passes_test(is_in_group('admin_products'),login_url='main')
+@login_required
 def registrado(request):
     if request.method == "POST":
         # Cargar datos de la base de datos
@@ -147,6 +162,8 @@ def registrado(request):
                     'codigo': codigo
                 }))
 
+@user_passes_test(is_in_group('admin_products'),login_url='main')
+@login_required
 def nuevaMarca(request):
     categorias = Categoria.objects.all()
     listaCaracteristicas = OpcionCaracterisca.objects.all().order_by('nombre')
@@ -187,6 +204,8 @@ def nuevaMarca(request):
                 'categorias': categorias,
                 'marcas': marcas})
 
+@user_passes_test(is_in_group('admin_products'),login_url='main')
+@login_required
 def nuevaCategoria(request):    
     marcas = Marca.objects.all()
     listaCaracteristicas = OpcionCaracterisca.objects.all().order_by('nombre')
@@ -227,6 +246,8 @@ def nuevaCategoria(request):
                 'categorias': categorias,
                 'marcas': marcas})
 
+@user_passes_test(is_in_group('admin_products'),login_url='main')
+@login_required
 def nuevaCaracteristica(request):
     marcas = Marca.objects.all()
     categorias = Categoria.objects.all()

@@ -1,0 +1,24 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block title %}Login{% endblock %}
+{% block css %} <link rel="stylesheet" href="{% static 'inicio/css/login.css' %}"> {% endblock %}
+
+{% block content %}
+<div class="container">
+    {% if error %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+    {% endif %}
+    <h2>Inicio de sesion</h2>
+    <form action="{% url 'auth' %}" method="POST">
+        {% csrf_token %}
+
+        {{ login.as_p }}
+
+        <button type="submit" class="btn">Login</button>
+        <button type="button" class="btn-create" onclick="window.location.href='/nuevo'">Crear usuario</button>
+    </form>
+</div>
+{% endblock %}

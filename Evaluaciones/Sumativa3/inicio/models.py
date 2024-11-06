@@ -59,4 +59,4 @@ class Producto(models.Model):
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, default=1)
 
     def __str__(self):
-        return self.codigo
+        return f"{self.codigo} -{self.nombre}"

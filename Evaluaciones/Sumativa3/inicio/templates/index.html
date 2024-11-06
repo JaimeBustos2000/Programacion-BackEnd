@@ -22,21 +22,41 @@
             <h1 class="logo-text">Productora SA</h1>
         </div>
         <div class="btns">
-            <button type="button" onclick="window.location.href='/'" >Inicio</button>
-            <button type="button" onclick="window.location.href='/registro'" >Registrar</button>
-            <button type="button" onclick="window.location.href='/productos'" >Productos</button>
+            {% if user.is_authenticated %}
+                {% if user.is_superuser %}
+                    <button type="button" onclick="window.location.href='/productos'">Productos</button>
+                    <button type="button" onclick="window.location.href='/admin'">Admin/Django</button>
+                    <button type="button" onclick="window.location.href='/registro'">Admin/Web</button>
+                    <button type="button" onclick="window.location.href='/info'">Info sesion</button>
+                    <button type="button" onclick="window.location.href='/logout'">Cerrar sesión</button>
+                {% else %}
+                    {% if request.session.admin_products %}
+                        <button type="button" onclick="window.location.href='/productos'">Productos</button>
+                        <button type="button" onclick="window.location.href='/admin'">Admin/Django</button>
+                        <button type="button" onclick="window.location.href='/registro'">Admin/Web</button>
+                        <button type="button" onclick="window.location.href='/info'">Info sesion</button>
+                        <button type="button" onclick="window.location.href='/logout'">Cerrar sesión</button>
+                    {% else %}
+                        <button type="button" onclick="window.location.href='/productos'">Productos</button>
+                        <button type="button" onclick="window.location.href='/info'">Info sesion</button>
+                        <button type="button" onclick="window.location.href='/logout'">Cerrar sesión</button>
+                    {% endif %}
+                {% endif %}
+            {% else %}
+                <button type="button" onclick="window.location.href='/inicio'" >Inicio</button>
+                <button type="button" onclick="window.location.href='/'" >Iniciar sesión</button>
+            {% endif %}
+            
         </div>
     </nav>
     
     <main>
         {% block content %}
-        {% load static %}
-        <link rel="stylesheet" href="{% static 'inicio/css/inicio.css' %}">
-        <div style='background-color: #f0f0f0;padding: 20px;border-radius: 10px;'>
-            <h1 style='color: #333;font-size: 54px; font-weight: bold; font-family: Oswald; text-align:center'>¡Bienvenido a Productora S.A.!</h1>
-            <p style='font-size:24px; font-family:"Prompt", sans-serif'>
-                En esta página podrás revisar los productos existentes en el sistema, añadir nuevos productos, categorias, marcas y caracteristicas, así como tambien eliminar
-                Para comenzar, selecciona una de las opciones del menú superior.
+        <div class="main-container">
+            <h1>¡Bienvenido a Productora S.A.!</h1>
+            <p>
+                En esta página podrás revisar o editar los productos existentes en el sistema,
+                además de poder agregar nuevos productos, inicia sesión para comenzar.
             </p>
         </div>
         {% endblock %}
