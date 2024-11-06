@@ -29,17 +29,19 @@ Esta aplicacion se genera por medio del framework de backend DJANGO de python es
 ...
 Si desea iniciar la aplicacion web basta con escribir el siguiente comando en la terminal de vscode '**python manage.py runserver**' y presionar Enter, esto iniciara el proceso de la aplicacion web, el cual le enviara un mensaje en la terminal con un link del siguiente estilo '**http://127.0.0.1:8000/**', copie este enlace en su navegador y vera que la aplicacion estara operativa. Revise que la carpeta donde se encuentra es la que contiene el archivo 'manage.py', si no es el caso abra la carpeta correcta en la parte superior de VsCode.
 
-<div style="font-size:25px;">
-  IMPORTANTE
-</div>
+
+IMPORTANTE:
+-----
 
 VISTAS DE LAS APP(carpetas):
 
--INICIO: Pagina principal, login, informacion de la sesion, registro usuario.
--PRODUCTOS: Visualizacion de los productos existentes y filtros.
--REGISTRO: Añadir nuevos productos (En este caso la actualizacion/eliminacion esta disponible solo por django admin)
--RESULTADO: Vista de exito en caso de que los campos ingresados del formulario de creacion esten correctos, presentando
-            la informacion ingresada previamente y de manera ordenada.
+  1) INICIO: Pagina principal, login, informacion de la sesion, registro usuario.
+  2) PRODUCTOS: Visualizacion de los productos existentes y filtros.
+  3) REGISTRO: Añadir nuevos productos (En este caso la actualizacion/eliminacion esta
+     disponible solo por django admin)
+  4) RESULTADO: Vista de exito en caso de que los campos ingresados del formulario
+     de creacion esten correctos, presentando la informacion ingresada previamente y
+     de manera ordenada.
 
 
 
@@ -58,22 +60,25 @@ MEDIDAS DE SEGURIDAD APLICADAS:
 
           Usuario: admin   contraseña: inacap2024
 
-    B) admin_products: Se le permite realizar operaciones con los modelos existentes, tambien tiene acceso a django admin
-      pero solo puede interactuar en la creacion de nuevos productos,caracteristicas, categorias y marcas. 
+    B) admin_products: Se le permite realizar operaciones con los modelos existentes, 
+      tambien tiene acceso a django admin pero solo puede interactuar en la creacion 
+      de nuevos productos,caracteristicas, categorias y marcas. 
       Tambien tiene acceso a visualizar los productos actuales y filtrarlos.
 
           Usuario: franarias2550    contraseña: inacap2024
 
     C) general: Solo permite lectura de los productos actuales y ademas filtrarlos.
 
-          Usuario: usuario12345    contraseña:inacap2024
+          Usuario: usuario12345    contraseña: inacap2024
 
-    PD: Las vistas como el login y registro estan protegidas solo para usuarios no autenticados. Por defecto solo se pueden crear
-    usuarios con rol 'general' a travez de la app web, sin embargo se pueden crear o manipular con el usuario admin en django admin.
+    PD: Las vistas como el login y registro estan protegidas solo para usuarios no autenticados. 
+        Por defecto solo se pueden crear usuarios con rol 'general' a travez de la app 
+        web, sin embargo se pueden crear o manipular con el usuario admin en django admin.
 
     settings.py/
     ...
-    LOGIN_URL="/"    #Redireccionamiento al inicio en este caso el login cuando se intenta acceder a un dominio no autorizado.
+    LOGIN_URL="/"    #Redireccionamiento al inicio en este caso el login cuando 
+                        se intenta acceder a un dominio no autorizado.
     ...
 
   4) Uso de CORSHEADERS: Limitacion de dominios que pueden acceder a la web.
@@ -82,9 +87,7 @@ MEDIDAS DE SEGURIDAD APLICADAS:
 
      En relacion a esto el acceso sera controlado por las variables de sesion, con una clave 'admin_products', que sera un booleano que consulta a la base de datos y almacena si el usuario pertenece o no a ese grupo. Por tanto esta consulta se hara una unica vez mientras se haya iniciado sesion.
 
-                                                                                    booleano que arroja
-        acceso a sesion    nombre_grupo             consulta por medio del ORM     si pertenece al grupo
-           |||||||||      ||||||||||||||          ||||||||||||||||||||||||||||||      |||||||
+
      EJ: request.session['admin_products'] = user.groups.filter(name='admin_products').exists()
 
     PD: Se añade un debug-log para monitorear los accesos y errores provenientes de la aplicacion.
