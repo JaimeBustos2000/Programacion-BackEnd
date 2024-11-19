@@ -71,9 +71,6 @@ MEDIDAS DE SEGURIDAD APLICADAS:
 
           Usuario: usuario12345    contraseña: inacap2024
 
-    PD: Las vistas como el login y registro estan protegidas solo para usuarios no autenticados. 
-        Por defecto solo se pueden crear usuarios con rol 'general' a travez de la app 
-        web, sin embargo se pueden crear o manipular con el usuario admin en django admin.
 
     settings.py/
     ...
