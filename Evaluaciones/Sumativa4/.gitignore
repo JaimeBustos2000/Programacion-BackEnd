@@ -1,0 +1,10 @@
+# Ignorar los archivos y directorios de caché de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyo
+*.pyd
+
+# Ignorar archivos adicionales .py 
+poblacion.py
