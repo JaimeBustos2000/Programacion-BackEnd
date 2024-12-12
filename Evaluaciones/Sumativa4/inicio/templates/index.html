@@ -26,14 +26,14 @@
                 {% if user.is_superuser %}
                     <button type="button" onclick="window.location.href='/productos'">Productos</button>
                     <button type="button" onclick="window.location.href='/admin'">Admin/Django</button>
-                    <button type="button" onclick="window.location.href='/registro'">Admin/Web</button>
+                    <button type="button" onclick="window.location.href='/productos/registro'">Admin/Web</button>
                     <button type="button" onclick="window.location.href='/info'">Info sesion</button>
                     <button type="button" onclick="window.location.href='/logout'">Cerrar sesión</button>
                 {% else %}
                     {% if request.session.admin_products %}
                         <button type="button" onclick="window.location.href='/productos'">Productos</button>
                         <button type="button" onclick="window.location.href='/admin'">Admin/Django</button>
-                        <button type="button" onclick="window.location.href='/registro'">Admin/Web</button>
+                        <button type="button" onclick="window.location.href='/productos/registro'">Admin/Web</button>
                         <button type="button" onclick="window.location.href='/info'">Info sesion</button>
                         <button type="button" onclick="window.location.href='/logout'">Cerrar sesión</button>
                     {% else %}

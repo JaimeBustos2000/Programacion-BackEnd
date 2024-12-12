@@ -170,3 +170,37 @@ tr {
     font-size: 16px;
     cursor: pointer;
 }
+
+.option-list{
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+}
+
+.delete-btn{
+    padding: 5px 10px;
+    background-color: #f44336;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.delete-btn:hover{
+    background-color: #d32f2f;
+}
+
+.edit-btn{
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.edit-btn:hover{
+    background-color: #45a049;
+}

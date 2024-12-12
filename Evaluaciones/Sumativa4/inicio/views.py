@@ -42,6 +42,8 @@ def auth(request):
         if not User.objects.filter(username=usuario).exists():
             return render(request,"login.html",context={"login":login_form,"error":"Usuario no existe"})
         
+        api_url = "http://localhost:8000/api/token"
+        
         user = authenticate(username=usuario,password=contrasena)
         
         if user is not None:

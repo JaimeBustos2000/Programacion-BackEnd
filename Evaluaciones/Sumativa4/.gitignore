@@ -5,6 +5,7 @@ __pycache__/
 *.pyd
 *.pyo
 *.pyd
+debug.log
 
 # Ignorar archivos adicionales .py 
 poblacion.py

@@ -34,7 +34,6 @@ ALLOWED_HOSTS = ['localhost',
 INSTALLED_APPS = [
     'corsheaders',
     'productos',
-    'registro',
     'resultado',
     'inicio',
     'django.contrib.admin',

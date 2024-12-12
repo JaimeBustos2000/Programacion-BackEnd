@@ -6,6 +6,10 @@
 {% block title %} Productos {% endblock %}
 {% block content %}
 
+{% if mensaje %}
+    <h3>{{ mensaje }}</h3>
+{% else %}
+{% endif %}
 
 <div class="container">
     <h1>Consulta de Productos</h1>
@@ -72,6 +76,11 @@
                     <th>Categoría</th>
                     <th>Características</th>
                     <th>Precio</th>
+                    {% if user.is_authenticated %}
+                        {% if request.session.admin_products %}
+                            <th>Opciones</th>
+                        {% endif %}
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -79,27 +88,43 @@
                 {% for producto in productos %}
                 <tr class="tupla-producto">
                     <td>{{ producto.codigo }}</td>
-                    <td>{{ producto.marca.nombre }}</td>
+                    <td>{{ producto.marca }}</td>
                     <td>{{ producto.nombre }}</td>
-                    <td>{{ producto.categoria.nombre }}</td>
+                    <td>{{ producto.categoria}}</td>
                     <td>
                         <ul class="lista-cts">
-                            {% for caracteristica in producto.caracteristicas.all %}
-                                <li>{{ caracteristica.nombre }}: {{ caracteristica.descripcion }}</li>
+                            {% for key,value in producto.caracteristicas.items %}
+                                <li>{{ key }}: {{ value }}</li>
                             {% endfor %}
                         </ul>
                     </td>
                     <td>$ {{ producto.precio }}</td>
+                    {% if user.is_authenticated %}
+                        {% if request.session.admin_products %}
+                            <td>
+                                <ul class="opction-list">
+                                    <form method="POST" action="{% url 'eliminar' producto.id %}" class="delete-form">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="producto_id" value="{{ producto.id }}">
+                                        <button class="delete-btn">Eliminar</button>
+                                    </form>
+                                    <button class="edit-btn">Editar</button>
+                                </ul>
+                            </td>
+                        {% endif %}
+                    {% endif %}
+
                 </tr>
                 {% endfor %}
             {% else %}
                 <tr class="txt-nproducts">
-                    <td colspan="6">No se encontraron productos.</td>
+                    <td colspan="7">No se encontraron productos.</td>
                 </tr>
             {% endif %}
             </tbody>
         </table>
     </div>
+
 </div>
 <script src="{% static 'productos/js/consulta.js' %}"></script>
 

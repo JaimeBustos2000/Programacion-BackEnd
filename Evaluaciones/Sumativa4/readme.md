@@ -119,3 +119,31 @@ REGISTRO DE PRODUCTOS NUEVOS:
 Detalles adicionales acerca del llenado de registros:
  1) El programa permite añadir productos sin caracteristicas o con multiples de estas.
  2) Luego de añadir un producto vera una pantalla con el detalle del producto añadido.
+
+
+--API:
+Aqui se detalla como usar la api, para acceder en este caso esta sin jwt por lo que puede entrar a 'http://127.0.0.1:8000/productos/api/docs' sin requerir autorizacion de la sesion del usuario.
+
+En este caso las apis se detallaran por orden de insercion y visualizacion en la pagina:
+
+    AUTH
+  1) /token: Esta api requiere un usuario y contraseña validados en el sistema que esten dentro del grupo de admin_products, que son los que pueden administrar esto. (No implementado)
+
+    ALL
+  1)  /all : Esta api obtiene todos los productos de la base de datos, no pide ningun dato para ingresar por tanto es solo ejecutar la api en la pagina web. (Implementado)
+
+    PRODUCTS
+  1) /products/{pid} : Obtiene un producto especifico, el unico argumento que recibe es un integer que debe estar dentro del rango de la base de datos sino existe lanzara una excepcion de error 404. (implementado)
+
+  2) /delete/{pid} : Al ingresar el argumento de un id valido, provocara la eliminacion de dicho producto en la base de datos. (implementado)
+
+  3) /edit/{pid} : Reemplaza los datos existentes del producto con los datos nuevos (no implementado)
+
+  4) /addproducto : Permite insertar un nuevo producto teniendo en cuenta los siguientes argumentos 
+        codigo: string de 7 de longitud y que empieza con #
+        marca_id : integer
+        nombre : string 
+        precio : int
+        categoria_id : int
+        caracteristicas : lista de caracteristicas referenciadas por sus ids si es que aplica por lo que puede estar vacio
+        (en revision pero implementado)
