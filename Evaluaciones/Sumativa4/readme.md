@@ -122,6 +122,8 @@ Detalles adicionales acerca del llenado de registros:
 
 
 API:
+-----
+
 Aqui se detalla como usar la api, para acceder en este caso esta sin jwt por lo que puede entrar a 'http://127.0.0.1:8000/productos/api/docs' sin requerir autorizacion de la sesion del usuario.
 
 En este caso las apis se detallaran por orden de insercion y visualizacion en la pagina:
