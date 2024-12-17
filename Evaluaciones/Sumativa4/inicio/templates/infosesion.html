@@ -1,12 +1,12 @@
 {% extends 'index.html' %}
 {% load static %} 
-{% block css %} <link rel="stylesheet" href="{% static 'inicio/css/style.css' %}"> {% endblock %}
+{% block css %} <link rel="stylesheet" href="{% static 'inicio/css/sesion.css' %}"> {% endblock %}
 
 {% block title %}Session Information{% endblock %}
 
 {% block content %}
     <div class="session-info">
-        <h1>Session Information</h1>
+        <h1>Informacion de la sesion</h1>
         <p><strong>Nombre usuario:</strong> {{ request.session.user }}</p>
         <p><strong>Es administrador de productos:</strong> {{ request.session.admin_products }}</p>
         <p><strong>Fecha de inicio de sesion:</strong> {{ request.session.login_date }}</p>

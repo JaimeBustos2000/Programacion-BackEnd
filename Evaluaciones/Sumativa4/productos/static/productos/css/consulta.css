@@ -114,6 +114,7 @@ tr {
 }
 
 .lista-cts li {
+    width: max-content;
     background-color: #ffeb3b;
     padding: 10px;
     border: 1px solid #fbc02d;
@@ -203,4 +204,9 @@ tr {
 
 .edit-btn:hover{
     background-color: #45a049;
+}
+
+#opt-btns{
+    display: inline-block;
+    max-width: max-content;
 }

@@ -27,20 +27,20 @@ def productos_list(request):
     response = requests.get('http://127.0.0.1:8000/productos/api/all')
     if response.status_code == 200:
         data = response.json()
-    else:
-        return JsonResponse({"Error":"No se pudieron obtener los datos de la api","message":"Solicitud no satisfactoria"})
-    marcas = Marca.objects.all()
-    categorias = Categoria.objects.all()
-    caracteristicas = Caracteristica.objects.all()
-    
-    context = {
+        marcas = Marca.objects.all()
+        categorias = Categoria.objects.all()
+        caracteristicas = Caracteristica.objects.all()
+        context = {
         'productos': data,
         'marcas': marcas,
         'categorias': categorias,
         'caracteristicas': caracteristicas,
         'mensaje': mensaje
-    }
-    return render(request, 'consulta.html', context)
+        }
+        return render(request, 'consulta.html', context)
+    else:
+        return JsonResponse({"Error":"No se pudieron obtener los datos de la api","message":"Error interno del servidor"},status=500)
+    
 
 
 # Vista de consulta de productos con permisos de consulta
@@ -128,7 +128,9 @@ def consulta(request):
 @user_passes_test(is_in_group('admin_products'), login_url='main')
 @login_required
 def eliminar(request, producto_id):
-    response = requests.delete(f'http://127.0.0.1:8000/productos/api/delete/{producto_id}')
+    jwt = request.session['token']
+    headers = {'Authorization': f'Bearer {jwt}'}
+    response = requests.delete(f'http://127.0.0.1:8000/productos/api/delete/{producto_id}',headers=headers)
     
     if response.status_code == 200:
         return redirect(f"{reverse('productos')}?mensaje=Producto eliminado")

@@ -2,5 +2,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.validacion, name='validacion')
+    #recibe un int id como parametro
+    path('<int:id>/', views.validacion, name='validacion')
 ]

@@ -14,6 +14,14 @@ def generar_token(user):
     }
     return jwt.encode(payload, SECRET_KEY, algorithm="HS256")
 
+def generar_token_generico(user):
+    payload = {
+        "user_id": user.id,
+        "exp": datetime.now(timezone.utc) + timedelta(hours=1),
+        "iat": datetime.now(timezone.utc)
+    }
+    return jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+
 
 def validar_token(token):
     try:
@@ -31,6 +39,9 @@ class JWTAuth(HttpBearer):
         if not payload:
             return None
         try:
-            return User.objects.get(id=payload["user_id"])
+            user = User.objects.get(id=payload["user_id"])
+            if payload.get("group_id") == "admin_products" and not user.groups.filter(name="admin_products").exists():
+                return None  # Verifica si el usuario tiene el grupo de admin_products
+            return user
         except User.DoesNotExist:
             return None

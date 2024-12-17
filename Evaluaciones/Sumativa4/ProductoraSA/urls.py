@@ -16,9 +16,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from productos.Api import api
 
 urlpatterns = [
     path('', include("inicio.urls"), name="main"),
     path('admin/',admin.site.urls,name="Admin"),
     path("productos/",include("productos.urls")),
 ]
+
+def custom_404(request, exception=None):
+    return api.create_response(request, 
+                               {'response': 'Recurso no encontrado'},
+                               status=404)
+
+handler404 = custom_404

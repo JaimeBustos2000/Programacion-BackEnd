@@ -12,20 +12,19 @@ def is_in_group(group_name):
 
 @login_required
 @user_passes_test(is_in_group('admin_products'),login_url='main')
-def validacion(request):
-    mensaje = request.GET.get('mensaje',None)
-    id = request.GET.get('id',None)
-    
-    api_url = f'http://127.0.0.1:8000/productos/api/{id}'
+def validacion(request,id):
+    print("ID:",id)
+    id = int(id)
+    api_url = f'http://127.0.0.1:8000/productos/api/product/{id}'
     response = requests.get(api_url)
+    print("Response en validacion:",response.status_code)
     if response.status_code == 200:
         producto = response.json()
+        print("Producto:",producto)
         return render(request, 'resultado.html', context={ 
-            'mensaje': mensaje,
             'producto': producto
         })
     else:
         return render(request, 'resultado.html', context={ 
-            'mensaje': mensaje,
             'producto': None
         })

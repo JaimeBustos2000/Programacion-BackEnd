@@ -87,15 +87,14 @@
             {% if productos %}
                 {% for producto in productos %}
                 <tr class="tupla-producto">
+                    <td hidden>{{ producto.id }}</td>
                     <td>{{ producto.codigo }}</td>
                     <td>{{ producto.marca }}</td>
                     <td>{{ producto.nombre }}</td>
                     <td>{{ producto.categoria}}</td>
                     <td>
                         <ul class="lista-cts">
-                            {% for key,value in producto.caracteristicas.items %}
-                                <li>{{ key }}: {{ value }}</li>
-                            {% endfor %}
+                            <button class="edit-btn" id="opt-btns" onclick="window.location.href='{% url 'detalles' producto.id %}'">Ver detalles</button>
                         </ul>
                     </td>
                     <td>$ {{ producto.precio }}</td>
@@ -106,9 +105,8 @@
                                     <form method="POST" action="{% url 'eliminar' producto.id %}" class="delete-form">
                                         {% csrf_token %}
                                         <input type="hidden" name="producto_id" value="{{ producto.id }}">
-                                        <button class="delete-btn">Eliminar</button>
+                                        <button class="delete-btn" id="opt-btns">Eliminar</button>
                                     </form>
-                                    <button class="edit-btn">Editar</button>
                                 </ul>
                             </td>
                         {% endif %}

@@ -5,7 +5,7 @@ import json
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db import IntegrityError
 import requests
-
+from urllib.parse import quote
 
 
 ############# Visor de grupo ##################
@@ -36,10 +36,10 @@ def validacion(*args):
 @login_required
 def register_page(request):
     mensaje = request.GET.get("mensaje",'')
-    categorias = Categoria.objects.all()
+    categorias = Categoria.objects.all().order_by('nombre')
     listaCaracteristicas = NombreCaracteristica.objects.all().order_by('nombre')
     lista_caracteristicas_json = json.dumps([str(caracteristica) for caracteristica in listaCaracteristicas])
-    marcas = Marca.objects.all()
+    marcas = Marca.objects.all().order_by('nombre')
     
     return render(request, 'registro.html', {
         'error_message': None,
@@ -61,8 +61,6 @@ def nuevo_producto(request):
         nombre = request.POST.get('nombre')
         precio = request.POST.get('precio')
         id_categoria = int(request.POST.get('categoria'))
-        
-        copia_post = request.POST.copy()
             
         code = espacios_vacios(codigo)
         name = espacios_vacios(nombre)
@@ -72,7 +70,7 @@ def nuevo_producto(request):
         lista_caracteristicas_json = json.dumps([str(caracteristica) for caracteristica in listaCaracteristicas])
         marcas = Marca.objects.all()
         
-        if len(codigo) < 6 or ' ' in codigo:
+        if len(codigo) < 6 or ' ' in codigo or not codigo.startswith('#'):
             return render(request, 'registro.html', 
                           context={'error_message': "El código debe tener al menos 6 caracteres sin espacios", 
                                     'categorias': categorias, 
@@ -94,20 +92,13 @@ def nuevo_producto(request):
                 'listaCaracteristicas': listaCaracteristicas, 
                 'listaCaracteristicas_json': lista_caracteristicas_json})
         
-        # Respuesta api
+        # Api url
         api_url = "http://127.0.0.1:8000/productos/api/addproducto/"
         
-        # Obtener la marca y la categoria
-        marca = Marca.objects.get(id=id_marca)
-        
-        categoria = Categoria.objects.get(id=id_categoria)
         
         # Obtener la lista de caracteristicas con detalles
         caracteristicas_nombre = request.POST.getlist('caracteristicas_nombre[]')
         caracteristicas_detalle = request.POST.getlist('caracteristicas_detalle[]')
-
-        # Comprobar si los campos están vacíos o solo contienen espacios
-
         
         # Comprobar si las listas de caracteristicas y detalles no están vacías
         campos_validos = validacion(code, name)
@@ -115,48 +106,58 @@ def nuevo_producto(request):
         
         # Crear el producto con las caracteristicas
         if campos_validos and listas_validas:
-            caracteristicas_list = []
-            for nombre, detalle in zip(caracteristicas_nombre, caracteristicas_detalle):
-                caracteristicas_list.append({
-                    "nombre": nombre,
-                    "detalle": detalle
-                })
-                
-            api_caracteristicas = "http://127.0.0.1:8000/productos/api/addcaracteristicas/"
-            payload_caracteristicas = { caracteristicas_list }
-            response_caracteristicas = requests.post(api_caracteristicas, json=payload_caracteristicas)
-            print(response_caracteristicas.status_code)
-            if response_caracteristicas.status_code == 200 or response_caracteristicas.status_code == 201:
-                data = response_caracteristicas.json()
-                caracteristicas_ids = data.get('id')
-                copia_post['caracteristicas'] = caracteristicas_ids
+            try:
+                caracteristicas_list = [
+                    {"nombre": nombre, "detalle": detalle}
+                    for nombre, detalle in zip(caracteristicas_nombre, caracteristicas_detalle)
+                ]
+            except:
+                caracteristicas_list = []
+
+            # Crear las caracteristicas y retornar ids
+            try:
+                caracteristicas_ids = []
+                for caracteristica in caracteristicas_list:
+                    nombre_caracteristica = NombreCaracteristica.objects.filter(nombre=caracteristica['nombre']).first()
+                    caracteristica = Caracteristica.objects.create(nombre=nombre_caracteristica, descripcion=caracteristica['detalle'])
+                    caracteristicas_ids.append(caracteristica.id)
+            except:
+                caracteristicas_ids = []
+            
+            if caracteristicas_ids:
+                payload = {
+                           "codigo": codigo,
+                           "marca_id": id_marca,
+                           "nombre": nombre,
+                           "precio": precio,
+                           "categoria_id": id_categoria,
+                            "caracteristicas": caracteristicas_ids
+                           }
             else:
-                error_message = "Error al crear las caracteristicas"
-                return render(request, 'registro.html', {
-                    'mensaje': None,
-                    'error_message': error_message,
-                    'listaCaracteristicas': listaCaracteristicas,
-                    'listaCaracteristicas_json': lista_caracteristicas_json,
-                    'categorias': categorias,
-                    'marcas': marcas,
-                })
+                payload = {
+                           "codigo": codigo,
+                           "marca_id": id_marca,
+                           "nombre": nombre,
+                           "precio": precio,
+                           "categoria_id": id_categoria,
+                           "caracteristicas": []
+                           }
+                
+            print("payload", payload)
             
-            del copia_post['csrfmiddlewaretoken']
-            del copia_post['caracteristicas_nombre[]']
-            del copia_post['caracteristicas_detalle[]']
-            print(copia_post)
+            jwt = request.session.get('token')
+            headers = {
+                'Authorization': f'Bearer {jwt}'}
             
-            payload = copia_post
+            response = requests.post(api_url, json=payload, headers=headers)
             
-            response = requests.post(api_url, json=payload)
-            print(response.status_code)
             if response.status_code == 200 or response.status_code == 201:
-                mensaje = "Producto añadido correctamente"
+                
                 data = response.json()
                 product_id = data.get('id')
-                return redirect(f"{reverse('validacion')}?mensaje={mensaje}&id={product_id}")
+                return redirect(f"{reverse('validacion', kwargs={'id': product_id})}")
             else:
-                error_message = "Error al crear el producto."
+                error_message = response.json().get('error')
                 return render(request, 'registro.html', {
                     'mensaje': None,
                     'error_message': error_message,
@@ -168,20 +169,27 @@ def nuevo_producto(request):
             
         elif campos_validos and listas_validas == False:
             # Crear el producto si no hay caracteristicas
-            copia_post = copia_post.dict()
-            del copia_post['csrfmiddlewaretoken']
-            del copia_post['caracteristicas_nombre[]']
-            del copia_post['caracteristicas_detalle[]']
-            payload = copia_post
+            headers = {
+                'Authorization': f'Bearer {request.session["token"]}'}
             
-            response = requests.post(api_url, json=payload)
+            payload = {
+                "codigo": codigo,
+                "marca_id": id_marca,
+                "nombre": nombre,
+                "precio": precio,
+                "categoria_id": id_categoria,
+                "caracteristicas": []
+            }
+            
+            response = requests.post(api_url, json=payload, headers=headers)
+            # print(response.status_code)
             if response.status_code == 200 or response.status_code == 201:
-                mensaje = "Producto añadido correctamente"
                 data = response.json()
                 product_id = data.get('id')
-                return redirect(f"{reverse('validacion')}?mensaje={mensaje}&id={product_id}")
+                print("Producto creado con id:", product_id)
+                return redirect(f"{reverse('validacion', kwargs={'id': product_id})}")
             else:
-                error_message = "Error al crear el producto."
+                error_message = response.json().get('error')
                 return render(request, 'registro.html', {
                     'mensaje': None,
                     'error_message': error_message,
@@ -199,6 +207,7 @@ def nuevo_producto(request):
                     'codigo': codigo
                 }))
 
+# Vista para nueva marca
 @user_passes_test(is_in_group, login_url='main')
 @login_required
 def nuevaMarca(request):
@@ -211,15 +220,19 @@ def nuevaMarca(request):
         
         if marca and not marca.isspace() and espacios_vacios(marca):
             api_url = "http://127.0.0.1:8000/productos/api/addmarca/"
+            headers = {
+                'Authorization': f'Bearer {request.session["token"]}',
+                'Content-Type': 'application/json'
+                }
             payload = {"nombre": marca}
-            response = requests.post(api_url, json=payload)
+            response = requests.post(api_url, json=payload, headers=headers)
 
             if response.status_code == 200 or response.status_code == 201:
                 mensaje = "Añadida nueva marca"
                 # Redirigir con el mensaje como parámetro en la URL
                 return redirect(f"{reverse('register_page')}?mensaje={mensaje}")
             else:
-                error_message = "Error al crear la marca."
+                error_message = response.json().get('error')
                 return render(request, 'registro.html', {
                     'mensaje': None,
                     'error_message': error_message,
@@ -248,7 +261,7 @@ def nuevaMarca(request):
         'marcas': marcas,
     })
 
-
+# Vista para nueva categoria
 @user_passes_test(is_in_group('admin_products'),login_url='main')
 @login_required
 def nuevaCategoria(request):    
@@ -262,14 +275,15 @@ def nuevaCategoria(request):
         if categoria and not categoria.isspace() and espacios_vacios(categoria):
             api_url = "http://127.0.0.1:8000/productos/api/addcategoria/"
             payload = {"nombre": categoria}
-            response = requests.post(api_url, json=payload)
-            print(response.status_code)
+            headers ={ 'Authorization': f'Bearer {request.session["token"]}'}
+            
+            response = requests.post(api_url, json=payload, headers=headers)
+
             if response.status_code == 200 or response.status_code == 201:
-                mensaje = "Añadida nueva categoría"
-                # Redirigir con el mensaje como parámetro en la URL
-                return redirect(f"{reverse('register_page')}?mensaje={mensaje}")
+                
+                return redirect(f"{reverse('register_page')}")
             else:
-                error_message = "Error al crear la categoría."
+                error_message = response.json().get('error')
                 return render(request, 'registro.html', {
                     'mensaje': None,
                     'error_message': error_message,
@@ -303,13 +317,14 @@ def nuevaCaracteristica(request):
         if caracteristica and not caracteristica.isspace() and espacios_vacios(caracteristica):
             api_url = "http://127.0.0.1:8000/productos/api/addcaracteristica/"
             payload = {"nombre": caracteristica}
-            response = requests.post(api_url, json=payload)
+            headers = {'Authorization': f'Bearer {request.session["token"]}'}
+            response = requests.post(api_url, json=payload, headers=headers)
             if response.status_code == 200 or response.status_code == 201:
                 mensaje = "Añadida nueva característica"
                 # Redirigir con el mensaje como parámetro en la URL
                 return redirect(f"{reverse('register_page')}?mensaje={mensaje}")
             else:
-                error_message = "Error al crear la característica."
+                error_message = response.json().get('error')
                 return render(request, 'registro.html', {
                     'mensaje': None,
                     'error_message': error_message,

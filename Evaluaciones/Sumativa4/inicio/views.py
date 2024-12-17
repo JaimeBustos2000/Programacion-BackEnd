@@ -7,6 +7,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.db import IntegrityError
 from .unauthdeco import unauthenticated_user
 from datetime import *
+import requests
 
 ############# Visor de grupo ##################
 def is_in_group(group_name):
@@ -16,7 +17,7 @@ def is_in_group(group_name):
 
 def is_in_group_any(user):
     # Verifica si el usuario pertenece a uno de los grupos
-    return user.groups.filter(name__in=['admin_products', 'general']).exists()
+    return user.groups.filter(name__in=['admin_products', 'individual']).exists()
 ############# Visor de grupo ##################
 
 # Vista principal inicio (no es '/')
@@ -42,19 +43,28 @@ def auth(request):
         if not User.objects.filter(username=usuario).exists():
             return render(request,"login.html",context={"login":login_form,"error":"Usuario no existe"})
         
-        api_url = "http://localhost:8000/api/token"
+        api_url = "http://localhost:8000/productos/api/token/"
         
-        user = authenticate(username=usuario,password=contrasena)
-        
-        if user is not None:
-            login(request,user=user)
-            session = request.session
-            session["user"] = usuario
-            session["admin_products"] = user.groups.filter(name="admin_products").exists()
-            
-            # Guardar fecha y hora de inicio de sesion en formato local chileno
-            hora_sesion = datetime.utcnow()
-            session['login_date'] = hora_sesion.strftime("%d-%m-%Y %H:%M:%S")
+        response = requests.post(api_url, json={"username":usuario,"password":contrasena})
+        if response.status_code == 200 or response.status_code == 204:
+            try:
+                data = response.json()
+                token = data.get('token')
+            except:
+                print("El usuario no puede obtener el token")
+                token = None
+            finally:
+                user = authenticate(username=usuario, password=contrasena)
+                login(request, user)
+                session = request.session
+                session["user"] = usuario
+                session["admin_products"] = user.groups.filter(name="admin_products").exists()
+                hora_sesion = datetime.utcnow()
+                session['login_date'] = hora_sesion.strftime("%d-%m-%Y %H:%M:%S")
+                if token is not None:
+                    session['token'] = token
+                    print(session['token'])
+                    
             return redirect("main")
         else:
             return render(request,"login.html",context={"login":login_form,"error":"Usuario o contraseña incorrectos"})

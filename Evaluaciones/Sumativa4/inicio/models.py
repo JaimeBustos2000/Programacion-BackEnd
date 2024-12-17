@@ -13,7 +13,7 @@ class Caracteristica(models.Model):
     descripcion = models.TextField(max_length=200)
 
     def __str__(self):
-        return f"{self.nombre} - {self.descripcion}"
+        return f"{self.nombre} - {self.descripcion} - {self.id}"
 
 class Categoria(models.Model):
     id = models.AutoField(primary_key=True)
@@ -44,12 +44,14 @@ class Producto(models.Model):
         
         # Eliminar las relaciones ManyToMany antes de eliminar el producto
         self.caracteristicas.clear()
-
+    
         # Eliminar características si no están asociadas con otros productos
         for caracteristica in caracteristicas_a_eliminar:
-            if not caracteristica.productos.exists(): 
+            if not caracteristica.productos.exists():
+                caracteristica_id = caracteristica.id
                 caracteristica.delete()
-
+                print(f"Característica con ID {caracteristica_id} eliminada.")
+        
         # Eliminar el producto
         super().delete(*args, **kwargs)
 

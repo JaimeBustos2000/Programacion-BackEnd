@@ -1,6 +1,7 @@
 from django.urls import path,include
 from . import views_productos
 from . import views_registro
+from . import views_edicion
 from .Api import api
 
 urlpatterns = [
@@ -13,5 +14,7 @@ urlpatterns = [
     path('registro/nuevaCaracteristica/', views_registro.nuevaCaracteristica, name='nuevaCaracteristica'),
     path('validacion/', include("resultado.urls"), name='validacion'),
     path('eliminar/<int:producto_id>/', views_productos.eliminar, name='eliminar'),
+    path('detalles/<int:id>/', views_edicion.edicion_page, name='detalles'),
+    path('detalles/editado/<int:id>', views_edicion.edicion, name='editado'),
     path("api/",api.urls)
 ]
