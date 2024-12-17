@@ -62,7 +62,7 @@ Para iniciar la aplicación web, basta con escribir el siguiente comando en la t
    ```python
    request.session['admin_products'] = user.groups.filter(name='admin_products').exists()
 
-### Uso de aplicacion de administracion de productos
+### Uso de aplicación de administración de productos
 
 Para utilizar la aplicación correctamente tenga en cuenta lo siguiente:
 
