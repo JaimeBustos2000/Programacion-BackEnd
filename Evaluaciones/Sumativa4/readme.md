@@ -22,10 +22,11 @@ Para poder ejecutar el proyecto de Django, también debe tener Visual Studio Cod
 - `pip install django` y presione Enter.
   Si no puede realizar el comando, reinicie la aplicación de VSCode.
 - Realice la misma operación con el comando `pip install django-cors-headers`.
+- `pip install pyjwt`
 
 ## Clonar el Repositorio del Proyecto
 
-Ahora copie el siguiente link `https://github.com/JaimeBustos2000/Programacion-BackEnd.git`, abra de nuevo la terminal y escriba `git clone` y pegue el link con `CTRL+V`, luego presione Enter. Ahora vaya a 'Archivo', 'Abrir carpeta' y seleccione `sumativa3`. Si observa en la carpeta actual, verá un archivo llamado `manage.py`. Este archivo maneja el control de la aplicación principal y permite su ejecución.
+Ahora copie el siguiente link `https://github.com/JaimeBustos2000/Programacion-BackEnd.git`, abra de nuevo la terminal y escriba `git clone` y pegue el link con `CTRL+V`, luego presione Enter. Ahora vaya a 'Archivo', 'Abrir carpeta' y seleccione `sumativa4`. Si observa en la carpeta actual, verá un archivo llamado `manage.py`. Este archivo maneja el control de la aplicación principal y permite su ejecución.
 
 ## Aplicación Web
 
@@ -88,24 +89,34 @@ Detalles adicionales acerca del llenado de registros:
 ## API:
 -----
 
-Aquí se detalla cómo usar la API. Para acceder, en este caso está sin JWT, por lo que puede entrar a 'http://127.0.0.1:8000/productos/api/docs' sin requerir autorización de la sesión del usuario.
+Aquí se detalla cómo usar la API. Para acceder, en este caso estan implementados con JWT, por lo que al entrar a 'http://127.0.0.1:8000/productos/api/docs' le pedira un usuario valido en admin_products [Medidas de Seguridad Aplicadas](#medidas-de-seguridad-aplicadas).
 
 En este caso, las APIs se detallarán por orden de inserción y visualización en la página:
 
 ### AUTH:
-1. **/token:** Esta API requiere un usuario y contraseña validados en el sistema que estén dentro del grupo `admin_products`, que son los que pueden administrar esto. *(No implementado)*
+1. **127.0.0.1:8000/productos/api/token:** Esta API requiere un usuario y contraseña validados en el sistema que estén dentro del grupo `admin_products`, que son los que pueden obtener un jwt valido para editar, eliminar y actualizar esto. *(Implementado)*
 
 ### ALL:
-1. **/all:** Esta API obtiene todos los productos de la base de datos, no pide ningún dato para ingresar, por tanto, es solo ejecutar la API en la página web. *(Implementado)*
+1. **127.0.0.1:8000/productos/api/all:** Esta API global obtiene todos los productos de la base de datos, no pide ningún dato para ingresar, por tanto, es solo ejecutar la API en la página web. Al ver detalles *(Implementado)*
 
 ### PRODUCTS:
-1. **/products/{pid}:** Obtiene un producto específico, el único argumento que recibe es un entero que debe estar dentro del rango de la base de datos. Si no existe, lanzará una excepción de error 404. *(Implementado)*
-2. **/delete/{pid}:** Al ingresar el argumento de un ID válido, provocará la eliminación de dicho producto en la base de datos. *(Implementado)*
-3. **/edit/{pid}:** Reemplaza los datos existentes del producto con los datos nuevos. *(No implementado)*
-4. **/addproducto:** Permite insertar un nuevo producto, teniendo en cuenta los siguientes argumentos:
+
+Requieren de validacion con jwt debe utilizar la api token si ingresa por api/docs y luego ingresar el token en authorize
+1. **127.0.0.1:8000/productos/api/products/{pid}:** Obtiene un producto específico, el único argumento que recibe es un entero que debe estar dentro del rango de la base de datos. Si no existe, lanzará una excepción de error 404. *(Implementado)*
+2. **127.0.0.1:8000/productos/api/delete/{pid}:** Al ingresar el argumento de un ID válido, provocará la eliminación de dicho producto en la base de datos. *(Implementado)*
+3. **127.0.0.1:8000/productos/api/addproducto:** Permite insertar un nuevo producto, teniendo en cuenta los siguientes argumentos:
     - `codigo`: string de 7 de longitud y que empieza con #
-    - `marca_id`: integer
+    - `marca_id`: int
     - `nombre`: string
     - `precio`: int
     - `categoria_id`: int
-    - `caracteristicas`: lista de características referenciadas por sus IDs, si es que aplica (por lo que puede estar vacío). *(En revisión pero implementado)*
+    - `caracteristicas`: lista de características referenciadas por sus IDs, si es que aplica (por lo que puede estar vacío). *(implementado)*
+    Recomendado realizar esto por medio de la app web dado que la creacion de caracteristicas no existentes toma como argumentos el nombre y detalle y aqui solo se puede pedir la id.
+4. **127.0.0.1:8000/productos/api/patch/{pid}:** Puede ingresar parcialmente los datos disponibles:
+   -`marca_id`: int
+   -`categoria_id`: int
+   -`nombre`: string
+   -`precio`: int
+   Esto quiere decir que puede enviar entre 1 a 3 datos al formulario.  *(implementado)*
+5. **127.0.0.1:8000/productos/api/edit/{pid}:** Aqui se recibe un esquema completo del producto al igual que en addproducto.  *(implementado)*
+   
