@@ -1,151 +1,111 @@
 <div align="center">
-  PROYECTO DJANGO PRODUCTORASA
+  <h1>PROYECTO DJANGO PRODUCTORASA</h1>
 </div>
 
+## Contenidos
+- [Requisitos](#requisitos)
+- [Clonar el Repositorio del Proyecto](#clonar-el-repositorio-del-proyecto)
+- [Aplicación Web](#aplicacion-web)
+- [Importante](#importante)
+  - [Vistas de las App](#vistas-de-las-app)
+  - [Medidas de Seguridad Aplicadas](#medidas-de-seguridad-aplicadas)
+  - [Uso de Aplicación Administración de Productos](#uso-de-aplicacion-administracion-de-productos)
+- [Registro de Productos Nuevos](#registro-de-productos-nuevos)
+- [API](#api)
 
-REQUISITOS:
+## Requisitos
+
+Antes de comenzar debe instalar Python en su computadora. Para ello, diríjase a la página oficial [PYTHON](https://www.python.org/downloads/). Luego de seguir los pasos de la instalación para Python, necesita instalar Git en su sistema. Hágalo mediante el siguiente enlace [GIT](https://git-scm.com/download/), elija el sistema operativo correspondiente a su PC.
+
+Para poder ejecutar el proyecto de Django, también debe tener Visual Studio Code mediante el siguiente enlace [VSCode](https://code.visualstudio.com/download), elija el sistema operativo que esté utilizando actualmente. Habiendo terminado la instalación, abra Visual Studio Code y diríjase a la ventana lateral de extensiones (tiene forma de cuatro cuadrados). Escriba 'python' e instale la extensión. Al finalizar, abra una terminal con `CTRL + Ñ` y escriba dentro de ella los siguientes comandos:
+
+- `pip install django` y presione Enter.
+  Si no puede realizar el comando, reinicie la aplicación de VSCode.
+- Realice la misma operación con el comando `pip install django-cors-headers`.
+
+## Clonar el Repositorio del Proyecto
+
+Ahora copie el siguiente link `https://github.com/JaimeBustos2000/Programacion-BackEnd.git`, abra de nuevo la terminal y escriba `git clone` y pegue el link con `CTRL+V`, luego presione Enter. Ahora vaya a 'Archivo', 'Abrir carpeta' y seleccione `sumativa3`. Si observa en la carpeta actual, verá un archivo llamado `manage.py`. Este archivo maneja el control de la aplicación principal y permite su ejecución.
+
+## Aplicación Web
+
+Esta aplicación se genera por medio del framework de backend Django de Python. Está subdividida en carpetas en formato de módulos que representan cada una de las páginas visibles: el inicio, el registro de productos, la lista de productos, etc. Además, consta de módulos reutilizables mediante los templates de Django, sumando también los elementos estéticos por medio de CSS.
+
+Para iniciar la aplicación web, basta con escribir el siguiente comando en la terminal de VSCode `python manage.py runserver` y presionar Enter. Esto iniciará el proceso de la aplicación web, el cual le enviará un mensaje en la terminal con un link del siguiente estilo `http://127.0.0.1:8000/`. Copie este enlace en su navegador y verá que la aplicación estará operativa. Revise que la carpeta donde se encuentra es la que contiene el archivo `manage.py`. Si no es el caso, abra la carpeta correcta en la parte superior de VSCode.
+
+## Importante
+
+### Vistas de las App
+
+1. **INICIO**: Página principal, login, información de la sesión, registro de usuario.
+2. **PRODUCTOS**: Visualización de los productos existentes y filtros.
+3. **REGISTRO**: Añadir nuevos productos (la actualización/eliminación está disponible solo por Django admin).
+4. **RESULTADO**: Vista de éxito en caso de que los campos ingresados del formulario de creación estén correctos, presentando la información ingresada previamente y de manera ordenada.
+
+### Medidas de Seguridad Aplicadas
+
+1. **CSRF TOKEN**: Se añade al envío de los formularios para que solo se lean formularios provenientes del servidor de Django.
+2. **Protección de Cross-Site Scripting (XSS)**: Utilizando el sistema de formularios propios de Django, se envía desde el backend al frontend el formulario.
+3. **Restricción de ingreso y acceso a vistas**: Solo usuarios autorizados por medio del módulo `django.contrib.auth`:
+   - **Admin**: Permite todas las operaciones dentro de los modelos, acceso a Django admin, creación de grupos y usuarios, visualización y filtro de productos.
+     - Usuario: admin, Contraseña: inacap2024
+   - **admin_products**: Permite operaciones con los modelos existentes, acceso limitado a Django admin, creación de nuevos productos, características, categorías y marcas.
+     - Usuario: franarias2550, Contraseña: inacap2024
+   - **general**: Solo lectura de los productos actuales y filtros.
+     - Usuario: usuario12345, Contraseña: inacap2024
+   - `settings.py`:
+     ```python
+     LOGIN_URL="/"  # Redireccionamiento al inicio (login) cuando se intenta acceder a un dominio no autorizado.
+     ```
+4. **Uso de CORSHEADERS**: Limitación de dominios que pueden acceder a la web.
+5. **Sesiones seguras**: Destrucción de sesiones al cerrar el navegador, limitación de cookies a https y sesiones en caché. Control de acceso mediante variables de sesión.
+   ```python
+   request.session['admin_products'] = user.groups.filter(name='admin_products').exists()
+
+### USO DE APLICACIÓN ADMINISTRACIÓN DE PRODUCTOS:
+
+Para utilizar la aplicación correctamente tenga en cuenta lo siguiente:
+
+1. **Respetar el tipo de campo:** Los campos que requieren un tipo de dato específico tienen una pista de llenado.
+2. **Añadir nuevas marcas, características y categorías:** Verifique que estas hayan sido añadidas correctamente revisando si en el campo del formulario de registro está presente en el atributo añadido.
+3. **Unicidad de nombre y código:** Solo puede añadir productos que tengan un nombre único, código único y que los campos no contengan solo espacios, ya que esto generará un error.
+4. **Errores:** Todos los errores se mostrarán en una alerta emergente.
+5. **Acceder a la página de administración de Django:** Puede acceder a la página de administración de Django para editar en profundidad las marcas, características y categorías. Tiene el siguiente enlace: 
+   - '**http://127.0.0.1:8000/admin**'
+6. **Usuario de administración de Django:** 
+   - Usuario: admin  
+   - Contraseña: inacap2024
+7. **Tabla intermedia:** Existe una tabla intermedia para añadir el texto en cada caso: `opcioncaracteristica`, `opcioncategoria` y `nombremarca`. Aquí solo se asocian los nombres, los cuales pueden ser cualquiera que desee. Para añadir correctamente cada uno de los campos, debe luego agregarlos en las tablas `caracteristica`, `categoria` o `marca`, respectivamente.
+
+## REGISTRO DE PRODUCTOS NUEVOS:
 -----
-
-Antes de comenzar debe instalar python en su computadora, para ello dirijase a la pagina oficial [PYTHON](https://www.python.org/downloads/) luego de haber seguido los pasos de la instalacion para python necesita en su sistema instalar git, hagalo mediante el siguiente enlace [GIT](https://git-scm.com/download/), aqui escoja el sistema operativo correspondiente a su PC.
-
-Para poder ejecutar el proyecto de django debe tambien tener Visual Studio Code mediante el siguiente enlace [VSCode](https://code.visualstudio.com/download), aqui tambien debe escoger segun el sistema operativo que este utilizando actualmente,
-habiendo terminado la instalacion, abra Visual Studio Code y dirijase a la ventana lateral de extensiones, esta tiene forma de
-cuatro cuadrados, alli escriba 'python' e instale la extension, al finalizar abra una terminal con 'CTRL + Ñ' y escriba dentro de
-ella los siguientes comandos:
-
-  - '**pip install django**' y presione Enter. 
-    Si no puede realizar el comando reinicie la aplicacion de VSCode.
-
-  - Realice la misma operacion con el comando '**pip install django-cors-headers**'.
-
-CLONAR EL REPOSITORIO DEL PROYECTO:
------
-Ahora copie el siguiente link '**https://github.com/JaimeBustos2000/Programacion-BackEnd.git**', abra denuevo la terminal y escriba **'git clone'** y copie el link con CTRL+V, luego dele a Enter. Ahora vaya a 'Archivo', 'Abrir carpeta' y seleccione sumativa3. Si observa en la carpeta actual vera un archivo que se llama manage.py, este archivo maneja el control de la aplicacion principal y permite su ejecucion.
-
-APLICACION WEB:
-------
-Esta aplicacion se genera por medio del framework de backend DJANGO de python esta se subdivide en carpetas en formato de modulos que representaran cada uno de las paginas visibles, el inicio, el registro de productos, la lista de productos, etc, ademas constara con modulos reutilizables mediante los templates de django sumando tambien los elementos esteticos por medio de CSS.
-
-...
-Si desea iniciar la aplicacion web basta con escribir el siguiente comando en la terminal de vscode '**python manage.py runserver**' y presionar Enter, esto iniciara el proceso de la aplicacion web, el cual le enviara un mensaje en la terminal con un link del siguiente estilo '**http://127.0.0.1:8000/**', copie este enlace en su navegador y vera que la aplicacion estara operativa. Revise que la carpeta donde se encuentra es la que contiene el archivo 'manage.py', si no es el caso abra la carpeta correcta en la parte superior de VsCode.
-
-
-IMPORTANTE:
------
-
-VISTAS DE LAS APP(carpetas):
-
-  1) INICIO: Pagina principal, login, informacion de la sesion, registro usuario.
-  2) PRODUCTOS: Visualizacion de los productos existentes y filtros.
-  3) REGISTRO: Añadir nuevos productos (En este caso la actualizacion/eliminacion esta
-     disponible solo por django admin)
-  4) RESULTADO: Vista de exito en caso de que los campos ingresados del formulario
-     de creacion esten correctos, presentando la informacion ingresada previamente y
-     de manera ordenada.
-
-
-
-MEDIDAS DE SEGURIDAD APLICADAS:
-
-  1) Se añade CSRF TOKEN al envio de los formularios para que solo se lean formularios provenientes del servidor de django.
-
-  2) Proteccion de Cross-Site Scripting (XSS), por medio de la utilizacion del sistema de formularios propios de django,
-    se envia desde el backend al frontend el formulario.
-
-  3) Se restringe el ingreso y acceso a vistas a solo usuarios autorizados por medio del modulo django.contrib.auth:
-
-    A) Admin: Se le permite realizar todas las operaciones dentro de los modelos incluyendo el ingreso
-      a django admin, creacion de grupos y usuarios. Ademas visualizar los productos actuales con metodos
-      de filtro. Ya de por si contiene los permisos del grupo admin_products.
-
-          Usuario: admin   contraseña: inacap2024
-
-    B) admin_products: Se le permite realizar operaciones con los modelos existentes, 
-      tambien tiene acceso a django admin pero solo puede interactuar en la creacion 
-      de nuevos productos,caracteristicas, categorias y marcas. 
-      Tambien tiene acceso a visualizar los productos actuales y filtrarlos.
-
-          Usuario: franarias2550    contraseña: inacap2024
-
-    C) general: Solo permite lectura de los productos actuales y ademas filtrarlos.
-
-          Usuario: usuario12345    contraseña: inacap2024
-
-
-    settings.py/
-    ...
-    LOGIN_URL="/"    #Redireccionamiento al inicio en este caso el login cuando 
-                        se intenta acceder a un dominio no autorizado.
-    ...
-
-  4) Uso de CORSHEADERS: Limitacion de dominios que pueden acceder a la web.
-
-  5) Las sesiones que se destruyen al cerrar el navegador, limitacion de cookies solo a https y sesion en cache.
-
-     En relacion a esto el acceso sera controlado por las variables de sesion, con una clave 'admin_products', que sera un booleano que consulta a la base de datos y almacena si el usuario pertenece o no a ese grupo. Por tanto esta consulta se hara una unica vez mientras se haya iniciado sesion.
-
-
-     EJ: request.session['admin_products'] = user.groups.filter(name='admin_products').exists()
-
-    PD: Se añade un debug-log para monitorear los accesos y errores provenientes de la aplicacion.
-
-
-En resumen a lo anterior el flujo es el siguiente:
-
--usuario admin: Acceso total. Tanto a administracion como vistas.
-
--usuario del grupo admin_products: Edicion de productos, caracteristicas,categorias y marcas. Con acceso al admin de django.
-  Tambien tiene acceso total a las vistas relacionadas a la administracion de productos.
-
--usuario del grupo general: Solo tiene permisos de lectura de los productos por medio de la app web sin acceso a admin de django.
-  (simula un usuario comun)
-
-
-USO DE APLICACION ADMINISTRACION DE PRODUCTOS:
------
-Para utilizar la aplicacion correctamente tenga en cuenta lo siguiente:
-
- 1) Respetar el tipo de campo. Los campos que requieren un tipo de dato especifico tienen una pista de llenado.
- 2) Al añadir nuevas marcas, nombre caracteristicas y categoria, verifique que estas hayan sido añadidas correctamente revisando si en el campo del formulario de registro esta presente en el atributo añadido.
- 3) Solo puede añadir productos que tengan un nombre unico, codigo unico y que los campos no contengan solo espacios ya que dara error.
- 4) Todos los errores se mostraran en una alerta emergente.
- 5) Puede acceder a la pagina de administracion de django para editar en profundidad las marcas, caracteristicas y categorias tiene el siguiente link '**http://127.0.0.1:8000/admin**'
- 6) Para ingresar debe utilizar el usuario: admin  y la contraseña: inacap2024
- 7) Hay una tabla intermedia para añadir el texto en cada caso es: opcioncaracteristica, opcioncategoria y nombremarca, aqui solo se asocian los nombres el cual puede ser cualquiera que se desee, para añadir correctamente cada uno de los campos debe luego agregarlo en las tablas caracteristica, categoria o marca respectivamente.
-
-
-REGISTRO DE PRODUCTOS NUEVOS:
 
 Detalles adicionales acerca del llenado de registros:
- 1) El programa permite añadir productos sin caracteristicas o con multiples de estas.
- 2) Luego de añadir un producto vera una pantalla con el detalle del producto añadido.
 
+1. El programa permite añadir productos sin características o con múltiples de estas.
+2. Después de añadir un producto, verá una pantalla con el detalle del producto añadido.
 
-API:
+## API:
 -----
 
-Aqui se detalla como usar la api, para acceder en este caso esta sin jwt por lo que puede entrar a 'http://127.0.0.1:8000/productos/api/docs' sin requerir autorizacion de la sesion del usuario.
+Aquí se detalla cómo usar la API. Para acceder, en este caso está sin JWT, por lo que puede entrar a 'http://127.0.0.1:8000/productos/api/docs' sin requerir autorización de la sesión del usuario.
 
-En este caso las apis se detallaran por orden de insercion y visualizacion en la pagina:
+En este caso, las APIs se detallarán por orden de inserción y visualización en la página:
 
-    AUTH
-  1) /token: Esta api requiere un usuario y contraseña validados en el sistema que esten dentro del grupo de admin_products, que son los que pueden administrar esto. (No implementado)
+### AUTH:
+1. **/token:** Esta API requiere un usuario y contraseña validados en el sistema que estén dentro del grupo `admin_products`, que son los que pueden administrar esto. *(No implementado)*
 
-    ALL
-  1)  /all : Esta api obtiene todos los productos de la base de datos, no pide ningun dato para ingresar por tanto es solo ejecutar la api en la pagina web. (Implementado)
+### ALL:
+1. **/all:** Esta API obtiene todos los productos de la base de datos, no pide ningún dato para ingresar, por tanto, es solo ejecutar la API en la página web. *(Implementado)*
 
-    PRODUCTS
-  1) /products/{pid} : Obtiene un producto especifico, el unico argumento que recibe es un integer que debe estar dentro del rango de la base de datos sino existe lanzara una excepcion de error 404. (implementado)
-
-  2) /delete/{pid} : Al ingresar el argumento de un id valido, provocara la eliminacion de dicho producto en la base de datos. (implementado)
-
-  3) /edit/{pid} : Reemplaza los datos existentes del producto con los datos nuevos (no implementado)
-
-  4) /addproducto : Permite insertar un nuevo producto teniendo en cuenta los siguientes argumentos 
-        codigo: string de 7 de longitud y que empieza con #
-        marca_id : integer
-        nombre : string 
-        precio : int
-        categoria_id : int
-        caracteristicas : lista de caracteristicas referenciadas por sus ids si es que aplica por lo que puede estar vacio
-        (en revision pero implementado)
+### PRODUCTS:
+1. **/products/{pid}:** Obtiene un producto específico, el único argumento que recibe es un entero que debe estar dentro del rango de la base de datos. Si no existe, lanzará una excepción de error 404. *(Implementado)*
+2. **/delete/{pid}:** Al ingresar el argumento de un ID válido, provocará la eliminación de dicho producto en la base de datos. *(Implementado)*
+3. **/edit/{pid}:** Reemplaza los datos existentes del producto con los datos nuevos. *(No implementado)*
+4. **/addproducto:** Permite insertar un nuevo producto, teniendo en cuenta los siguientes argumentos:
+    - `codigo`: string de 7 de longitud y que empieza con #
+    - `marca_id`: integer
+    - `nombre`: string
+    - `precio`: int
+    - `categoria_id`: int
+    - `caracteristicas`: lista de características referenciadas por sus IDs, si es que aplica (por lo que puede estar vacío). *(En revisión pero implementado)*
