@@ -35,6 +35,7 @@ Esta aplicación se genera por medio del framework de backend Django de Python. 
 Para iniciar la aplicación web, basta con escribir el siguiente comando en la terminal de VSCode `python manage.py runserver` y presionar Enter. Esto iniciará el proceso de la aplicación web, el cual le enviará un mensaje en la terminal con un link del siguiente estilo `http://127.0.0.1:8000/`. Copie este enlace en su navegador y verá que la aplicación estará operativa. Revise que la carpeta donde se encuentra es la que contiene el archivo `manage.py`. Si no es el caso, abra la carpeta correcta en la parte superior de VSCode.
 
 ## Importante
+Filtros de las consultas no implementados al completo solo funciona el filtro por categoria o marca solamente
 
 ### Vistas de las App
 
