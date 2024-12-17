@@ -9,7 +9,7 @@
 - [Importante](#importante)
   - [Vistas de las App](#vistas-de-las-app)
   - [Medidas de Seguridad Aplicadas](#medidas-de-seguridad-aplicadas)
-  - [Uso de Aplicación Administración de Productos](#uso-de-aplicacion-administracion-de-productos)
+  - [Uso de Aplicación Administración de Productos](#uso-de-aplicacion-de-administracion-de-productos)
 - [Registro de Productos Nuevos](#registro-de-productos-nuevos)
 - [API](#api)
 
