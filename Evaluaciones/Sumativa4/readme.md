@@ -112,11 +112,12 @@ Requieren de validacion con jwt debe utilizar la api token si ingresa por api/do
     - `categoria_id`: int
     - `caracteristicas`: lista de características referenciadas por sus IDs, si es que aplica (por lo que puede estar vacío). *(implementado)*
     Recomendado realizar esto por medio de la app web dado que la creacion de caracteristicas no existentes toma como argumentos el nombre y detalle y aqui solo se puede pedir la id.
-4. **127.0.0.1:8000/productos/api/patch/{pid}:** Puede ingresar parcialmente los datos disponibles:
+4. **127.0.0.1:8000/productos/api/patch/{pid}:** Puede ingresar parcialmente los datos disponibles provenientes del esquema:
    -`marca_id`: int
    -`categoria_id`: int
    -`nombre`: string
    -`precio`: int
    Esto quiere decir que puede enviar entre 1 a 3 datos al formulario.  *(implementado)*
 5. **127.0.0.1:8000/productos/api/edit/{pid}:** Aqui se recibe un esquema completo del producto al igual que en addproducto.  *(implementado)*
-   
+
+Para mayor detalle revisar inicio/models.py o tambien productos/schemas.py
